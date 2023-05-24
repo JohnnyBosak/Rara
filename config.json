@@ -1,0 +1,24 @@
+{
+    "activities_list": [
+    "CHUNG HA 청하 Dream of You", 
+    "Music",
+    "Let's Rock Baby!"
+],
+  "chDontScan": [
+    "765576964081319976", "818290104053006336"
+  ],
+  "badges": {
+    "ActiveDeveloper": "1102409230872485918",
+    "BugHunterLevel1": "1102409237788901477",
+    "BugHunterLevel2": "1102409239521136640",
+    "PremiumEarlySupporter": "1102409242062901340",
+    "Partner": "1102409248845082645",
+    "Staff": "1102409253429448826",
+    "HypeSquadOnlineHouse1": "1102409258773008505",
+    "HypeSquadOnlineHouse2": "1102409261801291796",
+    "HypeSquadOnlineHouse3": "1102409257107853323",
+    "Hypesquad": "1102409264997351538",
+    "CertifiedModerator": "1102409266440183919",
+    "VerifiedDeveloper": "1102409235242958938"
+  }
+}

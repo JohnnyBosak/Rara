@@ -1,0 +1,60 @@
+const keepAlive = require(`./server`);
+keepAlive();
+
+const { Client, GatewayIntentBits, Partials, Collection, ActivityType } = require("discord.js");
+const { Guilds, GuildMembers, GuildMessages, MessageContent, GuildMessageReactions } = GatewayIntentBits;
+const { User, Message, GuildMember, ThreadMember } = Partials;
+
+const client = new Client({ 
+  intents: [Guilds, GuildMembers, GuildMessages, MessageContent, GuildMessageReactions],
+  partials : [ User, Message, GuildMember, ThreadMember]
+});
+
+const { loadEvents } = require("./Handlers/eventHandler");
+
+client.config = require("./config.json");
+client.events = new Collection();
+client.commands = new Collection();
+client.subCommands = new Collection();
+client.guildConfig = new Collection();
+
+
+const { connect } = require("mongoose");
+connect(process.env.database, {
+}).then(() => console.log("The client is now connected to the Mongo database!"));
+
+loadEvents(client);
+
+const { loadConfig } = require("./Functions/configLoader");
+loadConfig(client);
+
+const { GiveawaysManager } = require("discord-giveaways");
+client.giveawayManager = new GiveawaysManager(client, {
+    default: {
+      botsCanWin: false,
+      embedColor: "#a200ff",
+      embedColorEnd: "#550485",
+      reaction: "🎉",
+    },
+});
+
+client.login(process.env.token)
+  .then(() => {
+    console.log(`client logged in as ${client.user.username}`);
+    client.user.setActivity(`with ${client.guilds.cache.size} guilds`);
+    setInterval(() => { //+
+        const index = Math.floor(Math.random() * (client.config.activities_list.length - 1) + 1);
+        const targetGuild = client.guilds.cache.get("429089094690275338")
+        if (targetGuild) {
+            client.user.setPresence({
+                activities: [{
+                    name: client.config.activities_list[index] + ' with ' + targetGuild.memberCount + ' people',
+                    type: ActivityType.Listening
+                }],
+                status: 'dnd',
+            });
+        }
+    }, 10000); //+
+    //client.on("debug", (e) => console.log(e));
+
+}).catch((err) => console.log(err));

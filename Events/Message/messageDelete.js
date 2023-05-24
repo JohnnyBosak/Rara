@@ -1,0 +1,55 @@
+const { EmbedBuilder, Message } = require("discord.js");
+const config = require("../../config.json");
+const chDontScan = config.chDontScan;
+
+module.exports = {
+    name: "messageDelete",
+    /**
+     * @param {Message} message
+     */
+    async execute(message) {
+        if (!message ||
+            !message.author ||
+            message.author.bot ||
+            chDontScan.some((element) => element === message.channel.id)
+            ) return;
+
+        const guild = message.guild;
+        const deletedMsgChannelLog = guild.channels.cache.get("818290104053006336");// or message.guild.channels.cache.find(channel => channel.name === 'radelgirl')
+        if (!deletedMsgChannelLog) return;
+
+        // Log the deleted message
+        const Log = new EmbedBuilder()
+            .setAuthor({
+                name: `${message.author.username} (message deleted)`,
+                iconURL: `${message.author.avatarURL({
+                    dynamic: true,
+                    format: "png",
+                    })}`,
+                url: `${message.url}`,
+            })
+            .setColor("#FF0000")
+            .setTimestamp()
+            .setDescription(
+                `**Deleted Message:**\n ${
+                    message.content ? message.content : "None"
+                    }`.slice(0, 4096)
+                    )
+            .setFooter({
+                text: `${message.channel.name}`,
+                iconURL: "https://i.ibb.co/s3WkBCw/13e8a9704032f64926ac7f2487110f7b.png",
+            });
+
+        if (message.attachments.size >= 1) {
+            Log.addFields({
+                name: "Attachments :",
+                value: `${message.attachments.map((a) => a.url).join("\n")}`,
+                inline: true,
+            });
+        }
+
+        deletedMsgChannelLog.send({
+            embeds: [Log]
+        }).catch((err) => console.log(err));
+    },
+};
