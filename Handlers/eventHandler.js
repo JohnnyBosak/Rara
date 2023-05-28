@@ -19,6 +19,7 @@
 
         events.push({ Event: event.name, Status: "🟢" });
       } catch (error) { 
+        console.error(`Error loading event '${file}':`, error);
         events.push({ Event: file.split("/").pop().slice(0, -3), Status: "🔴"});
       }
     }
