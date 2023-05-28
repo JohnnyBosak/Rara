@@ -1,4 +1,6 @@
 {
+  "Developer": "408675103946178561",
+  
     "activities_list": [
     "CHUNG HA 청하 Dream of You", 
     "Music",
@@ -20,5 +22,16 @@
     "Hypesquad": "1102409264997351538",
     "CertifiedModerator": "1102409266440183919",
     "VerifiedDeveloper": "1102409235242958938"
-  }
+  },
+    "nodes": [
+        {
+            "id": "main",
+            "host": "lavalink-replit.johnnybosak.repl.co",
+            "port": 443,
+            "password": "RaraGromServer ",
+            "retryAmount": 15, 
+            "retryDelay": 6000, 
+            "secure": true
+        }
+    ]  
 }
