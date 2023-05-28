@@ -2,12 +2,12 @@ const keepAlive = require(`./server`);
 keepAlive();
 
 const { Client, GatewayIntentBits, Partials, Collection, ActivityType } = require("discord.js");
-const { Guilds, GuildMembers, GuildMessages, MessageContent, GuildMessageReactions } = GatewayIntentBits;
-const { User, Message, GuildMember, ThreadMember } = Partials;
+const { Guilds, GuildMembers, GuildMessages, MessageContent, GuildMessageReactions, GuildVoiceStates } = GatewayIntentBits;
+const { User, Message, GuildMember, ThreadMember, Channel, Reaction } = Partials;
 
 const client = new Client({ 
-  intents: [Guilds, GuildMembers, GuildMessages, MessageContent, GuildMessageReactions],
-  partials : [ User, Message, GuildMember, ThreadMember]
+  intents: [Guilds, GuildMembers, GuildMessages, MessageContent, GuildMessageReactions, GuildVoiceStates],
+  partials : [User, Message, GuildMember, ThreadMember, Channel, Reaction]
 });
 
 const { loadEvents } = require("./Handlers/eventHandler");
