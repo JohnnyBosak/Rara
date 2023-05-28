@@ -1,0 +1,32 @@
+{
+  "name": "nodejs",
+  "version": "14.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "funding": {
+    "type": "discord",
+    "url": "https://discord.gg/4ep26vM"
+  },
+  "keywords": [],
+  "author": "Johnny",
+  "license": "ISC",
+  "dependencies": {
+    "@replit/database": "latest",
+    "@types/node": "latest",
+    "ascii-table": "latest",
+    "discord-arts": "latest",
+    "discord-giveaways": "latest",
+    "discord-html-transcripts": "latest",
+    "discord.js": "latest",
+    "express": "latest",
+    "glob": "latest",
+    "moment": "latest",
+    "mongoose": "latest",
+    "ms": "latest",
+    "node-fetch": "latest",
+    "openai": "latest"
+  }
+}
