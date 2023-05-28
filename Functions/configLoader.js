@@ -11,14 +11,14 @@ async function loadConfig(client) {
       });
     });
 
-  (await configDatabaseClearLog.find().maxTimeMS(60000)).forEach((doc) => {
-    client.guildConfig.set(doc.Guild, {
-      logChannel: doc.logChannel
+    (await configDatabaseClearLog.find().maxTimeMS(60000)).forEach((doc) => {
+      client.guildConfig.set(doc.Guild, {
+        logChannel: doc.logChannel
+      });
     });
-  });
 
-  return console.log("Loaded Guild Configs to the Collection.");
-} catch (error) {
+    console.log("Loaded Guild Configs to the Collection.");
+  } catch (error) {
     console.error(`Error loading guild configs: ${error}`);
     await new Promise(resolve => setTimeout(resolve, 10000));
     return loadConfig(client);
@@ -28,6 +28,6 @@ async function loadConfig(client) {
       loadConfig(client);
     }, 10000);*/
   }
-
 }
+
 module.exports = { loadConfig }
