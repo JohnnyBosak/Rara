@@ -9,8 +9,10 @@ module.exports = {
      */
     async execute(message) {
         if (!message ||
+            !message.guild ||
             !message.author ||
             message.author.bot ||
+            message.channel.type === "DM" ||
             chDontScan.some((element) => element === message.channel.id)
             ) return;
 
