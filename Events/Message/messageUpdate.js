@@ -11,8 +11,10 @@ module.exports = {
    */
   execute(oldMessage, newMessage) {
         if (!oldMessage ||
+            !oldMessage.guild ||
             !oldMessage.author ||
             oldMessage.author.bot ||
+            oldMessage.channel.type === "DM" ||
             chDontScan.some((element) => element === oldMessage.channel.id)
             ) return;
     if (oldMessage.content === newMessage.content) return;
