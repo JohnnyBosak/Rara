@@ -6,25 +6,23 @@ async function loadCommands(client) {
   await client.commands.clear();
   await client.subCommands.clear();
 
-  let commandsArray = [];
+  const commandsArray = await Promise.all(
+    (await loadFiles("Commands")).map(async (file) => {
+      const command = require(file);
 
-  const Files = await loadFiles("Commands");
+      if (command.subCommand) {
+        client.subCommands.set(command.subCommand, command);
+      } else {
+        client.commands.set(command.data.name, command);
+        table.addRow(command.data.name, "🟢");
+        return command.data.toJSON();
+      }
+    })
+  );
 
-  Files.forEach((file) => {
-    const command = require(file);
+  client.application.commands.set(commandsArray.filter(Boolean));
 
-    if (command.subCommand) return client.subCommands.set(command.subCommand, command);
-
-    client.commands.set(command.data.name, command);
-
-    commandsArray.push(command.data.toJSON());
-
-    table.addRow(command.data.name, "🟢");
-  });
-
-  client.application.commands.set(commandsArray);
-
-  return console.log(table.toString(), "\nCommands Loaded.")
+  console.log(table.toString(), "\nCommands Loaded.");
 }
 
 module.exports = { loadCommands };
