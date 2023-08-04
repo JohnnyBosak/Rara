@@ -18,6 +18,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('yosoundboard')
     .setDescription('Play a sound')
+    .setDMPermission(false)
     .addStringOption((option) =>
       option.setName('sound')
         .setDescription('Your choice')
@@ -46,9 +47,9 @@ module.exports = {
       const customSound = interaction.options.getString('url-sound');
 
       if (sound) {
-      audioURL = baseUrl + soundMap[sound];
+        audioURL = baseUrl + soundMap[sound];
       }
-      if (customSound) {audioURL = customSound}
+      if (customSound) { audioURL = customSound }
 
       if (!audioURL) {
         await interaction.reply({ content: 'Invalid sound option.', ephemeral: true });
