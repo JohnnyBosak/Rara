@@ -1,13 +1,13 @@
-const { chatInputCommandInteraction } = require("discord.js");
+const { chatInputCommandInteraction, ContextMenuInteraction, ApplicationCommandType } = require("discord.js");
 
 module.exports = {
   name: "interactionCreate",
   /** 
   *
-  * @param {chatInputCommandInteraction} interaction
+  * @param {chatInputCommandInteraction, ContextMenuInteraction} interaction
   */
   execute(interaction, client) {
-    if (!interaction.isChatInputCommand()) return;
+    if (!interaction.isChatInputCommand() && !interaction.isMessageContextMenuCommand()) return;
 
     const command = client.commands.get(interaction.commandName);
     if (!command) 
