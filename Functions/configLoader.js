@@ -20,13 +20,7 @@ async function loadConfig(client) {
     console.log("Loaded Guild Configs to the Collection.");
   } catch (error) {
     console.error(`Error loading guild configs: ${error}`);
-    await new Promise(resolve => setTimeout(resolve, 10000));
-    return loadConfig(client);
-
-    // Retry the function after 10 seconds
-    /*setTimeout(() => {
-      loadConfig(client);
-    }, 10000);*/
+        setTimeout(() => loadConfig(client), 10000);
   }
 }
 
