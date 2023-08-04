@@ -2,12 +2,13 @@ const keepAlive = require(`./server`);
 keepAlive();
 
 const { Client, GatewayIntentBits, Partials, Collection, ActivityType } = require("discord.js");
-const { Guilds, GuildMembers, GuildMessages, MessageContent, GuildMessageReactions, GuildVoiceStates } = GatewayIntentBits;
-const { User, Message, GuildMember, ThreadMember, Channel, Reaction } = Partials;
+const { Guilds, GuildMembers, GuildModeration, GuildEmojisAndStickers, GuildIntegrations, GuildWebhooks, GuildInvites, GuildVoiceStates, GuildPresences, GuildMessages, GuildMessageReactions, GuildMessageTyping, DirectMessages, DirectMessageReactions, DirectMessageTyping, MessageContent, GuildScheduledEvents } = GatewayIntentBits;
 
-const client = new Client({ 
-  intents: [Guilds, GuildMembers, GuildMessages, MessageContent, GuildMessageReactions, GuildVoiceStates],
-  partials : [User, Message, GuildMember, ThreadMember, Channel, Reaction]
+const { User, Message, GuildMember, ThreadMember, Channel, Reaction, GuildScheduledEvent } = Partials;
+
+const client = new Client({
+  intents: [ Guilds, GuildMembers, GuildModeration, GuildEmojisAndStickers, GuildIntegrations, GuildWebhooks, GuildInvites, GuildVoiceStates, GuildPresences, GuildMessages, GuildMessageReactions, GuildMessageTyping, DirectMessages, DirectMessageReactions, DirectMessageTyping, MessageContent, GuildScheduledEvents ],
+  partials: [User, Message, GuildMember, ThreadMember, Channel, Reaction, GuildScheduledEvent]
 });
 
 const { loadEvents } = require("./Handlers/eventHandler");
@@ -30,31 +31,31 @@ loadConfig(client);
 
 const { GiveawaysManager } = require("discord-giveaways");
 client.giveawayManager = new GiveawaysManager(client, {
-    default: {
-      botsCanWin: false,
-      embedColor: "#a200ff",
-      embedColorEnd: "#550485",
-      reaction: "🎉",
-    },
+  default: {
+    botsCanWin: false,
+    embedColor: "#a200ff",
+    embedColorEnd: "#550485",
+    reaction: "🎉",
+  },
 });
 
 client.login(process.env.token)
   .then(() => {
-    console.log(`client logged in as ${client.user.username}`);
+    console.log(`client logged in as ${client.user.username} with ${client.guilds.cache.size} guilds`);
     client.user.setActivity(`with ${client.guilds.cache.size} guilds`);
     setInterval(() => { //+
-        const index = Math.floor(Math.random() * (client.config.activities_list.length - 1) + 1);
-        const targetGuild = client.guilds.cache.get("429089094690275338")
-        if (targetGuild) {
-            client.user.setPresence({
-                activities: [{
-                    name: client.config.activities_list[index] + ' with ' + targetGuild.memberCount + ' people',
-                    type: ActivityType.Listening
-                }],
-                status: 'dnd',
-            });
-        }
+      const index = Math.floor(Math.random() * (client.config.activities_list.length - 1) + 1);
+      const targetGuild = client.guilds.cache.get("429089094690275338")
+      if (targetGuild) {
+        client.user.setPresence({
+          activities: [{
+            name: client.config.activities_list[index] + ' with ' + targetGuild.memberCount + ' people',
+            type: ActivityType.Listening
+          }],
+          status: 'dnd',
+        });
+      }
     }, 10000); //+
     //client.on("debug", (e) => console.log(e));
 
-}).catch((err) => console.log(err));
+  }).catch((err) => console.log(err));
