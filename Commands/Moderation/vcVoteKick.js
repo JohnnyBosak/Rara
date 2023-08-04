@@ -4,6 +4,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('vote-kick')
     .setDescription('Creates a vote to kick member from your voice channel.')
+    .setDMPermission(false)
     .addUserOption(option =>
       option
         .setName('member')
