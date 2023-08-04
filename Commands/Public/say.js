@@ -5,7 +5,7 @@ module.exports = {
     .setName("say")
     .setDescription("Says something by the bot")
     .setDMPermission(false)
-    .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
     .addChannelOption(options => options
       .setName("channel")
       .setDescription("The channel you want to send the message")
@@ -26,7 +26,7 @@ module.exports = {
       .setTitle("Say something through the bot");
 
     if (embed === "off") {
-      const sayQuestion = new TextInputBuilder()
+      const sayInput = new TextInputBuilder()
         .setCustomId("say")
         .setLabel("Say something")
         .setPlaceholder("Type something...")
@@ -34,7 +34,7 @@ module.exports = {
         .setRequired(true);
 
       const actionRow = new ActionRowBuilder()
-        .addComponents(sayQuestion);
+        .addComponents(sayInput);
 
       sayModal.addComponents(actionRow);
 
@@ -119,7 +119,7 @@ module.exports = {
           }
         }*/
         if (embedImageURL) {
-          if (/^https?:\/\/\S+\.(?:jpg|jpeg|gif|png)(?:\?.+)?$/.test(embedImageURL)) { // Validate as an image URL with optional query parameters
+          if (/^https?:\/\/\S+\.(?:jpg|jpeg|gif|png)(?:\?.+)?$/.test(embedImageURL)) {
             embedBuilder.setImage(embedImageURL);
           } else {
             await response.reply({ content: "Invalid image URL for the embed image.", ephemeral: true });
@@ -127,7 +127,7 @@ module.exports = {
           }
         }
         if (embedThumbnailURL) {
-          if (/^https?:\/\/\S+\.(?:jpg|jpeg|gif|png)(?:\?.+)?$/.test(embedThumbnailURL)) { // Validate as an image URL with optional query parameters
+          if (/^https?:\/\/\S+\.(?:jpg|jpeg|gif|png)(?:\?.+)?$/.test(embedThumbnailURL)) {
             embedBuilder.setThumbnail(embedThumbnailURL);
           } else {
             await response.reply({ content: "Invalid image URL for the embed thumbnail.", ephemeral: true });
