@@ -1,9 +1,35 @@
 const { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, AttachmentBuilder, PermissionFlagsBits } = require("discord.js");
 const { profileImage } = require("discord-arts");
 
-// Constants for custom tag text and background image URL
+const colorChoices = [
+  { name: 'AliceBlue', value: '#F0F8FF' },
+  { name: 'AntiqueWhite', value: '#FAEBD7' },
+  { name: 'Aqua', value: '#00FFFF' },
+  { name: 'Black ', value: '#000000' },
+  { name: 'Blue', value: '#0000FF' },
+  { name: 'Blue Romance', value: '#D3FFCE' },
+  { name: 'Dim Gray', value: '#666666' },
+  { name: 'Elite Teal', value: '#133337' },
+  { name: 'Gold', value: '#FFD700' },
+  { name: 'Kerbal', value: '#BADA55' },
+  { name: 'Lavender', value: '#E6E6FA' },
+  { name: 'Lime Green', value: '#065535' },
+  { name: 'MistyRose', value: '#FFE4E1' },
+  { name: 'Orange', value: '#FFA500' },
+  { name: 'Pale Blue', value: '#C6E2FF' },
+  { name: 'Pale Magenta', value: '#FF80ED' },
+  { name: 'Pink', value: '#FF69B4' },
+  { name: 'PowderBlue', value: '#B0E0E6' },
+  { name: 'Prussian Blue', value: '#003366' },
+  { name: 'Purple', value: '#800080' },
+  { name: 'Red', value: '#FF0000' },
+  { name: 'Salmon', value: '#FF7373' },
+  { name: 'Teal ', value: '#008080' },
+  { name: 'Turquoise', value: '#40E0D0' },
+  { name: 'White', value: '#FFFFFF' },
+];
 const DEFAULT_BACKGROUND_IMAGE_URL = "https://i.imgur.com/DGA63O0.jpg";
-const WHITE = "#ffffff";
+const WHITE = "#FFFFFF";
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -19,33 +45,7 @@ module.exports = {
       option.setName("border-color")
         .setDescription("Color of your image border.")
         .setRequired(true)
-        .addChoices(
-          { name: 'Pale Magenta', value: '#FF80ED' },
-          { name: 'Lime Green', value: '#065535' },
-          { name: 'Black ', value: '#000000' },
-          { name: 'Elite Teal', value: '#133337' },
-          { name: 'Pink', value: '#FFC0CB' },
-          { name: 'White', value: '#FFFFFF' },
-          { name: 'MistyRose', value: '#FFE4E1' },
-          { name: 'Teal ', value: '#008080' },
-          { name: 'Red', value: '#FF0000' },
-          { name: 'Lavender', value: '#E6E6FA' },
-          { name: 'Gold', value: '#FFD700' },
-          { name: 'Aqua', value: '#00FFFF' },
-          { name: 'Orange', value: '#FFA500' },
-          { name: 'Salmon', value: '#FF7373' },
-          { name: 'Blue', value: '#0000FF' },
-          { name: 'Pale Blue', value: '#C6E2FF' },
-          { name: 'Turquoise', value: '#40E0D0' },
-          { name: 'PowderBlue', value: '#B0E0E6' },
-          { name: 'Blue Romance', value: '#D3FFCE' },
-          { name: 'AliceBlue', value: '#F0F8FF' },
-          { name: 'Dim Gray', value: '#666666' },
-          { name: 'AntiqueWhite', value: '#FAEBD7' },
-          { name: 'Kerbal', value: '#BADA55' },
-          { name: 'Prussian Blue', value: '#003366' },
-          { name: 'Purple', value: '#800080' },
-        )
+        .addChoices(...colorChoices.map(choice => ({ name: choice.name, value: choice.value })))
     )
     .addStringOption(option =>
       option.setName("background-image")
@@ -55,33 +55,7 @@ module.exports = {
       option.setName("username-color")
         .setDescription("Color of your username.")
         .setRequired(false)
-        .addChoices(
-          { name: 'Pale Magenta', value: '#FF80ED' },
-          { name: 'Lime Green', value: '#065535' },
-          { name: 'Black ', value: '#000000' },
-          { name: 'Elite Teal', value: '#133337' },
-          { name: 'Pink', value: '#FFC0CB' },
-          { name: 'White', value: '#FFFFFF' },
-          { name: 'MistyRose', value: '#FFE4E1' },
-          { name: 'Teal ', value: '#008080' },
-          { name: 'Red', value: '#FF0000' },
-          { name: 'Lavender', value: '#E6E6FA' },
-          { name: 'Gold', value: '#FFD700' },
-          { name: 'Aqua', value: '#00FFFF' },
-          { name: 'Orange', value: '#FFA500' },
-          { name: 'Salmon', value: '#FF7373' },
-          { name: 'Blue', value: '#0000FF' },
-          { name: 'Pale Blue', value: '#C6E2FF' },
-          { name: 'Turquoise', value: '#40E0D0' },
-          { name: 'PowderBlue', value: '#B0E0E6' },
-          { name: 'Blue Romance', value: '#D3FFCE' },
-          { name: 'AliceBlue', value: '#F0F8FF' },
-          { name: 'Dim Gray', value: '#666666' },
-          { name: 'AntiqueWhite', value: '#FAEBD7' },
-          { name: 'Kerbal', value: '#BADA55' },
-          { name: 'Prussian Blue', value: '#003366' },
-          { name: 'Purple', value: '#800080' },
-        )
+        .addChoices(...colorChoices.map(choice => ({ name: choice.name, value: choice.value })))
     )
     .addStringOption(option =>
       option.setName("tag-text")
@@ -91,33 +65,7 @@ module.exports = {
       option.setName("tag-color")
         .setDescription("Color of your tag.")
         .setRequired(false)
-        .addChoices(
-          { name: 'Pale Magenta', value: '#FF80ED' },
-          { name: 'Lime Green', value: '#065535' },
-          { name: 'Black ', value: '#000000' },
-          { name: 'Elite Teal', value: '#133337' },
-          { name: 'Pink', value: '#FFC0CB' },
-          { name: 'White', value: '#FFFFFF' },
-          { name: 'MistyRose', value: '#FFE4E1' },
-          { name: 'Teal ', value: '#008080' },
-          { name: 'Red', value: '#FF0000' },
-          { name: 'Lavender', value: '#E6E6FA' },
-          { name: 'Gold', value: '#FFD700' },
-          { name: 'Aqua', value: '#00FFFF' },
-          { name: 'Orange', value: '#FFA500' },
-          { name: 'Salmon', value: '#FF7373' },
-          { name: 'Blue', value: '#0000FF' },
-          { name: 'Pale Blue', value: '#C6E2FF' },
-          { name: 'Turquoise', value: '#40E0D0' },
-          { name: 'PowderBlue', value: '#B0E0E6' },
-          { name: 'Blue Romance', value: '#D3FFCE' },
-          { name: 'AliceBlue', value: '#F0F8FF' },
-          { name: 'Dim Gray', value: '#666666' },
-          { name: 'AntiqueWhite', value: '#FAEBD7' },
-          { name: 'Kerbal', value: '#BADA55' },
-          { name: 'Prussian Blue', value: '#003366' },
-          { name: 'Purple', value: '#800080' },
-        )
+        .addChoices(...colorChoices.map(choice => ({ name: choice.name, value: choice.value })))
     )
     .addStringOption(option =>
       option.setName("badges")
@@ -131,33 +79,7 @@ module.exports = {
       option.setName("border-color2")
         .setDescription("Second color of your image border.")
         .setRequired(false)
-        .addChoices(
-          { name: 'Pale Magenta', value: '#FF80ED' },
-          { name: 'Lime Green', value: '#065535' },
-          { name: 'Black ', value: '#000000' },
-          { name: 'Elite Teal', value: '#133337' },
-          { name: 'Pink', value: '#FFC0CB' },
-          { name: 'White', value: '#FFFFFF' },
-          { name: 'MistyRose', value: '#FFE4E1' },
-          { name: 'Teal ', value: '#008080' },
-          { name: 'Red', value: '#FF0000' },
-          { name: 'Lavender', value: '#E6E6FA' },
-          { name: 'Gold', value: '#FFD700' },
-          { name: 'Aqua', value: '#00FFFF' },
-          { name: 'Orange', value: '#FFA500' },
-          { name: 'Salmon', value: '#FF7373' },
-          { name: 'Blue', value: '#0000FF' },
-          { name: 'Pale Blue', value: '#C6E2FF' },
-          { name: 'Turquoise', value: '#40E0D0' },
-          { name: 'PowderBlue', value: '#B0E0E6' },
-          { name: 'Blue Romance', value: '#D3FFCE' },
-          { name: 'AliceBlue', value: '#F0F8FF' },
-          { name: 'Dim Gray', value: '#666666' },
-          { name: 'AntiqueWhite', value: '#FAEBD7' },
-          { name: 'Kerbal', value: '#BADA55' },
-          { name: 'Prussian Blue', value: '#003366' },
-          { name: 'Purple', value: '#800080' },
-        )
+        .addChoices(...colorChoices.map(choice => ({ name: choice.name, value: choice.value })))
     )
     .addBooleanOption(option =>
       option.setName("square-avatar")
@@ -180,10 +102,8 @@ module.exports = {
    * @param {ChatInputCommandInteraction} interaction The interaction object representing the slash command invocation.
    */
   async execute(interaction) {
-    // Defer the reply to the user until the command has finished processing.
     await interaction.deferReply();
 
-    // Retrieve the user and border color options from the interaction.
     const user = interaction.options.getUser("target");
 
     const borderColor = interaction.options.getString("border-color");
