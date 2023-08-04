@@ -10,6 +10,6 @@ module.exports = {
   execute(interaction, client) {
     client.emit("guildMemberRemove", interaction.member);
 
-    interaction.reply({content: "Emitted GuildMemberLeft", ephemeral: true});
+    //interaction.reply({content: "Emitted GuildMemberLeft", ephemeral: true});
   }
 }
