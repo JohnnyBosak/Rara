@@ -1,6 +1,7 @@
 const { GuildMember, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 
 const moment = require("moment");
+const memberLogDatabase = require("../../Schemas/MemberLog");
 
 module.exports = {
   name: "guildMemberAdd",
@@ -8,7 +9,7 @@ module.exports = {
   * @param {GuildMember} member
   */
   async execute(member, client) {
-    const guildConfig = client.guildConfig.get(member.guild.id);
+    const guildConfig = await memberLogDatabase.findOne({ Guild: member.guild.id });
     if (!guildConfig) return;
 
     const guildRoles = member.guild.roles.cache;
@@ -17,7 +18,7 @@ module.exports = {
     if (!assignedRole) assignedRole = "Not configured.";
     else await member.roles.add(assignedRole).catch(() => { assignedRole = "Failed due to role hierarchy"});
 
-    const logChannel = (await member.guild.channels.fetch()).get(guildConfig.logChannel);
+    const logChannel = guildConfig ? member.guild.channels.cache.get(guildConfig.logChannel) : null;
     if (!logChannel) return;
 
     let color = "#74e21e"
