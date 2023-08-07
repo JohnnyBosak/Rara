@@ -1,4 +1,5 @@
 const { GuildMember, EmbedBuilder } = require("discord.js");
+const memberLogDatabase = require("../../Schemas/MemberLog");
 
 module.exports = {
   name: "guildMemberRemove",
