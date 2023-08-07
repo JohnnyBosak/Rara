@@ -13,6 +13,13 @@ async function loadCommands(client) {
       if (command.subCommand) {
         client.subCommands.set(command.subCommand, command);
       } else {
+        // Ensure command.data contains valid command information
+        if (!command.data || !command.data.name) {
+          console.error(`Invalid command data in file '${file}'`);
+          table.addRow("Unknown Command", "🔴");
+          return null; // Skip this command
+        }
+        
         client.commands.set(command.data.name, command);
         table.addRow(command.data.name, "🟢");
         return command.data.toJSON();
