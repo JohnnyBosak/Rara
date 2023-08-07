@@ -4,5 +4,6 @@ module.exports = model("MemberLog", new Schema({
   Guild: String,
   logChannel: String,
   memberRole: String,
-  botRole: String
+  botRole: String,
+  welcomeChannel: String
 }))
