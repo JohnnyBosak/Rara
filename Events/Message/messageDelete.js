@@ -9,22 +9,20 @@ module.exports = {
    * @param {Message} message
    */
   async execute(message) {
+    const guildConfig = await database.findOne({
+      Guild: message.guild.id
+    });
+
+    const deletedMsgChannelLog = guildConfig ? message.guild.channels.cache.get(guildConfig.logChannel) : null;
+    if (!deletedMsgChannelLog) return;
+
     if (!message ||
         !message.guild ||
         !message.author ||
         message.author.bot ||
         message.channel.type === "DM" ||
-        chDontScan.some((element) => element === message.channel.id) ||
-        message.deletedByClearCommand
+        chDontScan.some((element) => element === message.channel.id)
        ) return;
-
-    const guildConfig = await database.findOne({
-      Guild: message.guild.id
-    });
-    const deletedMsgChannelLog = guildConfig ? message.guild.channels.cache.get(guildConfig.logChannel) : null;
-
-    //const deletedMsgChannelLog = message.guild.channels.cache.get("818290104053006336");
-    if (deletedMsgChannelLog === null) return;
 
     // Log the deleted message
     const Log = new EmbedBuilder()
