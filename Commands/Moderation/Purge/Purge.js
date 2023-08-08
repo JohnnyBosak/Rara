@@ -65,7 +65,7 @@ module.exports = {
 
       const transcript = await transcripts.generateFromMessages(messagesToDelete, interaction.channel);
 
-      await Promise.all([
+      await Promise.all([        
         interaction.channel.bulkDelete(messagesToDelete, true),
         interaction.reply({
           embeds: [responseEmbed.setDescription(`🧹 Cleared ${messagesToDelete.length} messages.`)],
