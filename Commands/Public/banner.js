@@ -122,7 +122,7 @@ module.exports = {
     }
 
     const badgesFrame = interaction.options.getBoolean("badges-frame") || false;
-    const customTagText = interaction.options.getString("tag-text") || user.discriminator;
+    const customTagText = interaction.options.getString("tag-text") || (user.discriminator !== "0" ? user.discriminator : " ");
     const backgroundImageUrl = interaction.options.getString("background-image") || DEFAULT_BACKGROUND_IMAGE_URL;
     const presenceStatus = interaction.options.getString("presence-status") || "dnd";
     const squareAvatar = interaction.options.getBoolean("square-avatar") || false;
