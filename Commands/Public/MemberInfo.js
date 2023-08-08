@@ -31,7 +31,9 @@ module.exports = {
 
     try {
       const fetchedMembers = await interaction.guild.members.fetch();
-      const profileBuffer = await profileImage(member.id);
+      const profileBuffer = await profileImage(member.id, { 
+        //customTag: (member.user.discriminator !== "0" ? member.user.discriminator : " "),
+      });
       const imageAttachment = new AttachmentBuilder(profileBuffer, { name: "profile.png" });
 
       const joinPosition = Array.from(fetchedMembers
