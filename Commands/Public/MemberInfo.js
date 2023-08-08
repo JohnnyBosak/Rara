@@ -1,6 +1,6 @@
-const { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } = require("discord.js");
+const { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder, EmbedBuilder, AttachmentBuilder, ButtonBuilder, ActionRowBuilder } = require("discord.js");
 const { profileImage } = require('discord-arts');
-const config = require('../../config.json');
+//const config = require('../../config.json');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -49,7 +49,25 @@ module.exports = {
       const joinTime = parseInt(member.joinedTimestamp / 1000);
       const createdTime = parseInt(member.user.createdTimestamp / 1000);
 
-      const booster = member.premiumSince ? "<:discordboost:1102409233632333935>" : "X";
+      const booster = member.premiumSince ? "<:discordboost:1102409233632333935>" : "✖";
+
+      const avatarButton = new ButtonBuilder()
+        .setLabel('Avatar')
+        .setStyle(5)
+        .setURL(member.displayAvatarURL({ size: 1024, dynamic: true }));
+
+      const row = new ActionRowBuilder().addComponents(avatarButton);
+
+      const bannerURL = (await member.user.fetch()).bannerURL();
+
+      if (bannerURL) {
+        const bannerButton = new ButtonBuilder()
+          .setLabel('Banner')
+          .setStyle(5)
+          .setURL(bannerURL);
+
+        row.addComponents(bannerButton);
+      }
 
       const embed = new EmbedBuilder()
         .setAuthor({ name: `${member.user.tag} | General Information`, iconURL: member.displayAvatarURL() })
@@ -62,11 +80,10 @@ module.exports = {
           { name: "Roles", value: `${topRoles.join(" ").replace("@everyone", "")}`, inline: false },
           { name: "Created", value: `<t:${createdTime}:R>`, inline: true },
           { name: "Joined", value: `<t:${joinTime}:R>`, inline: true },
-          { name: "Avatar", value: `[Link](${member.displayAvatarURL({ size: 1024 })})`, inline: true },
-          { name: "Banner", value: `[Link](${(await member.user.fetch()).bannerURL({ size: 1024 })})`, inline: true },
+          { name: "UserID", value: `${member.id}`, inline: true },
         ]);
 
-      interaction.editReply({ embeds: [embed], files: [imageAttachment] });
+      interaction.editReply({ embeds: [embed], components: [row], files: [imageAttachment] });
     } catch (error) {
       console.error(error);
       if (error.code === "UND_ERR_ABORTED") {
