@@ -30,11 +30,11 @@ module.exports = {
     const Log = new EmbedBuilder()
       .setAuthor({
         name: `${message.author.username} (message deleted)`,
-        iconURL: `${message.author.avatarURL({
+        iconURL: message.author.avatarURL({
           dynamic: true,
           format: "png",
-        })}`,
-        url: `${message.url}`,
+        }),
+        url: message.url,
       })
       .setColor("#FF0000")
       .setTimestamp()
@@ -43,14 +43,14 @@ module.exports = {
           }`.slice(0, 4096)
       )
       .setFooter({
-        text: `${message.channel.name}`,
+        text: message.channel.name,
         iconURL: "https://i.ibb.co/s3WkBCw/13e8a9704032f64926ac7f2487110f7b.png",
       });
 
     if (message.attachments.size >= 1) {
       Log.addFields({
         name: "Attachments :",
-        value: `${message.attachments.map((a) => a.url).join("\n")}`,
+        value: message.attachments.map((a) => a.url).join("\n"),
         inline: true,
       });
     }
