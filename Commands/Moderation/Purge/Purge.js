@@ -23,10 +23,9 @@ module.exports = {
       .setName("reason")
       .setDescription("Provide the reason why you are clearing these messages.")
     ),
-  /** 
-  *
-  * @param {ChatInputCommandInteraction} interaction
-  */
+  /**
+   * @param {ChatInputCommandInteraction} interaction
+   */
   async execute(interaction) {
     try {
       const amount = interaction.options.getNumber("amount");
@@ -40,8 +39,9 @@ module.exports = {
       const logChannel = guildConfig ? interaction.guild.channels.cache.get(guildConfig.logChannel) : null;
 
       const responseEmbed = new EmbedBuilder().setColor("DarkNavy");
-      const logEmbed = new EmbedBuilder().setColor("DarkAqua")
-        .setAuthor({ name: "CLEAR COMMAND USED" });
+      const logEmbed = new EmbedBuilder().setColor("DarkAqua").setAuthor({
+        name: "CLEAR COMMAND USED"
+      });
 
       const logEmbedDescription = [
         `• Moderator: ${interaction.member}`,
@@ -50,60 +50,39 @@ module.exports = {
         `• Reason: ${reason}`
       ];
 
+      let messagesToDelete = [];
       if (target) {
         let i = 0;
-        const messagesToDelete = [];
-        channelMessages.filter((message) => {
+        channelMessages.filter(message => {
           if (message.author.id === target.id && i < amount) {
             messagesToDelete.push(message);
             i++;
           }
         });
-
-        const transcript = await transcripts.generateFromMessages(messagesToDelete, interaction.channel);
-
-        interaction.channel.bulkDelete(messagesToDelete, true).then((messages) => {
-          messages.forEach((message) => {
-            message.deletedByClearCommand = true;
-          });
-          interaction.reply({
-            embeds: [responseEmbed.setDescription(`🧹 Cleared \`${messages.size}\` messages from ${target}.`)],
-            ephemeral: true
-          }).catch(console.error);
-
-          logEmbedDescription.push(`• Total Messages: ${messages.size}`);
-          if (logChannel) {
-            logChannel.send({
-              embeds: [logEmbed.setDescription(logEmbedDescription.join("\n"))],
-              files: [transcript]
-            });
-          }
-        });
       } else {
-        const transcript = await transcripts.createTranscript(interaction.channel, { limit: amount });
+        messagesToDelete = channelMessages.first(amount);
+      }
 
-        interaction.channel.bulkDelete(amount, true).then((messages) => {
-          messages.forEach((message) => {
-            message.deletedByClearCommand = true;
-          });
-          interaction.reply({
-            embeds: [responseEmbed.setDescription(`🧹 Cleared ${messages.size} messages.`)],
-            ephemeral: true
-          }).catch(console.error);
+      const transcript = await transcripts.generateFromMessages(messagesToDelete, interaction.channel);
 
-          logEmbedDescription.push(`• Total Messages: ${messages.size}`);
-          if (logChannel) {
-            logChannel.send({
-              embeds: [logEmbed.setDescription(logEmbedDescription.join("\n"))],
-              files: [transcript]
-            });
-          }
+      await Promise.all([
+        interaction.channel.bulkDelete(messagesToDelete, true),
+        interaction.reply({
+          embeds: [responseEmbed.setDescription(`🧹 Cleared ${messagesToDelete.length} messages.`)],
+          ephemeral: true
+        })
+      ]);
+
+      logEmbedDescription.push(`• Total Messages: ${messagesToDelete.length}`);
+      if (logChannel) {
+        await logChannel.send({
+          embeds: [logEmbed.setDescription(logEmbedDescription.join("\n"))],
+          files: [transcript]
         });
       }
     } catch (error) {
       console.error(error);
-      // Handle the error here, such as sending an error message to the user
       interaction.reply("An error occurred while executing the command. Please try again later.");
     }
   }
-}
+};
