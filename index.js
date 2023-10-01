@@ -7,7 +7,7 @@ const { Guilds, GuildMembers, GuildModeration, GuildEmojisAndStickers, GuildInte
 const { User, Message, GuildMember, ThreadMember, Channel, Reaction, GuildScheduledEvent } = Partials;
 
 const client = new Client({
-  intents: [ Guilds, GuildMembers, GuildModeration, GuildEmojisAndStickers, GuildIntegrations, GuildWebhooks, GuildInvites, GuildVoiceStates, GuildPresences, GuildMessages, GuildMessageReactions, GuildMessageTyping, DirectMessages, DirectMessageReactions, DirectMessageTyping, MessageContent, GuildScheduledEvents ],
+  intents: [Guilds, GuildMembers, GuildModeration, GuildEmojisAndStickers, GuildIntegrations, GuildWebhooks, GuildInvites, GuildVoiceStates, GuildPresences, GuildMessages, GuildMessageReactions, GuildMessageTyping, DirectMessages, DirectMessageReactions, DirectMessageTyping, MessageContent, GuildScheduledEvents],
   partials: [User, Message, GuildMember, ThreadMember, Channel, Reaction, GuildScheduledEvent]
 });
 
@@ -21,8 +21,15 @@ client.guildConfig = new Collection();
 
 
 const { connect } = require("mongoose");
-connect(process.env.database, {
-}).then(() => console.log("The client is now connected to the Mongo database!"));
+async function connectToDatabase() {
+  try {
+    connect(process.env.database, {});
+    console.log("The client is now connected to the Mongo database!");
+    } catch (error) { console.error("Error connecting to the database:", err);
+    setTimeout(connect, 5000);
+  }
+}
+connectToDatabase();
 
 loadEvents(client);
 
