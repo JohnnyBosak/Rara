@@ -36,7 +36,7 @@ module.exports = {
         });
       }
       
-      const channel = client.channels.cache.get("430778195789348874");
+      const channel = client.channels.cache.get("818290209710932008");
 
       return channel.send({ embeds: [embedLogs] });
     }
