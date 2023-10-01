@@ -16,11 +16,11 @@ module.exports = {
     const Embed = new EmbedBuilder();
     const errorArray = [];
 
-    if (!interaction.member.permissions.has("KickMembers"))
+    if (!interaction.member.permissions.has("KickMembers") && !interaction.member.permissions.has("BanMembers"))
       errorArray.push("You do not have the required permissions for this action.");
 
     if (!member)
-    return interaction.reply({embeds: [Embed.setDescription("This user is no longer a member of this guild.")]});
+      return interaction.reply({ embeds: [Embed.setDescription("This user is no longer a member of this guild.")] });
 
     if (!member.moderatable)
       errorArray.push(`${member} is not moderatable by this bot.`);
@@ -31,19 +31,21 @@ module.exports = {
     });
 
     switch (splitArray[1]) {
-      case "Kick" : {
+      case "Kick": {
         member.kick(`Kicked by ${interaction.user.tag} | Member Logging System`).then(() => {
-          interaction.reply({embeds: [Embed.setDescription(`${member} has been kicked.`)]})
+          interaction.reply({ embeds: [Embed.setDescription(`${member} has been kicked.`)] })
         }).catch(() => {
-          interaction.reply({embeds: [Embed.setDescription(`${member} could not be kicked.`)]})
+          interaction.reply({ embeds: [Embed.setDescription(`${member} could not be kicked.`)] })
         })
       }
         break;
-      case "Ban" : {
-        member.ban(`Banned by ${interaction.user.tag} | Member Logging System`).then(() => {
-          interaction.reply({embeds: [Embed.setDescription(`${member} has been banned.`)]})
+      case "Ban": {
+        member.ban({
+          reason: `Banned by ${interaction.user.tag} | Member Logging System`
+        }).then(() => {
+          interaction.reply({ embeds: [Embed.setDescription(`${member} has been banned.`)] })
         }).catch(() => {
-          interaction.reply({embeds: [Embed.setDescription(`${member} could not be banned.`)]})
+          interaction.reply({ embeds: [Embed.setDescription(`${member} could not be banned.`)] })
         })
       }
         break;
