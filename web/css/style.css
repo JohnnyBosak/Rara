@@ -10,6 +10,7 @@ body {
   min-height: 100vh;
 }
 
+/* Navbar Styles */
 .navbar {
   background: url("../img/nav-bkg.jpg");
   background-repeat: no-repeat;
@@ -54,11 +55,94 @@ body {
   transition: text-shadow 0.3s;
 }
 
+.navbar ul li a {
+  color: white;
+}
+
 .navbar a {
   text-decoration: none;
   color: black;
 }
 
+/* Mobile Nav Styles */
+@media (max-width:600px) {
+  .navbar ul {
+    display: none;
+  }
+}
+
+/* Command List Styles */
+.command-list {
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  background-image: url("https://media.discordapp.net/attachments/430778195789348874/1154393570841727127/wallpaperflare.com_wallpaper_4.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.command-list h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  margin-left: -800px;
+  color: white;
+}
+
+.command-list ul {
+  list-style: none;
+  padding: 0;
+  margin-left: -800px;
+}
+
+.command-list li {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.command-list li span.beige-text {
+  color: BurlyWood;
+}
+
+.command-list li:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: background-color 0.3s;
+}
+
+/* Mobile styles (e.g., max-width: 600px) */
+@media (max-width: 600px) {
+  .command-list {
+    padding: 10px;
+    margin: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    /* Darken the background for readability */
+  }
+
+  .command-list h1 {
+    font-size: 24px;
+    margin-left: 0;
+    /* Remove negative margin for smaller screens */
+  }
+
+  .command-list ul {
+    margin-left: 0;
+    /* Remove negative margin for smaller screens */
+  }
+
+  .command-list li {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+}
+
+/* Hero Image Styles */
 .hero-image {
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     url("https://i.ibb.co/dWQ3JLX/bkg.png");
@@ -76,6 +160,12 @@ body {
   box-shadow: 0 0 10px 1px #00000060;
 }
 
+/* Beige Text Styles */
+.beige-text {
+  color: BurlyWood;
+}
+
+/* Hero Text Styles */
 .hero-text {
   text-align: center;
   position: absolute;
@@ -95,7 +185,6 @@ body {
   margin-bottom: 10px;
   font-size: 20px;
 }
-
 
 .hero-text button {
   border: 2px solid rgb(255, 109, 236);
@@ -117,6 +206,7 @@ body {
   transition: box-shadow 0.3s, transform 0.3s;
 }
 
+/* Card Container Styles */
 .card-container {
   max-width: 100vw;
   display: grid;
@@ -139,6 +229,7 @@ body {
   box-shadow: 0 0 10px 1px #00000060;
 }
 
+/* Banner Styles */
 .banner {
   height: auto;
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
@@ -156,6 +247,12 @@ body {
 
 .banner h1 {
   text-shadow: 0 0 10px 1px black;
+}
+
+/* Button Styles */
+.button,
+.button-green {
+  cursor: pointer;
 }
 
 .button {
@@ -190,6 +287,7 @@ body {
   transition: box-shadow 0.3s, transform 0.3s;
 }
 
+/* Footer Styles */
 .footer {
   display: flex;
   border: 1px solid rgba(0, 0, 0, 0.25);
@@ -219,6 +317,7 @@ body {
   transition: text-shadow 0.3s;
 }
 
+/* Hamburger Menu Styles */
 .hamburger {
   position: relative;
   display: block;
@@ -232,7 +331,9 @@ body {
   border: none;
 }
 
-.hamburger .bar, .hamburger:after, .hamburger:before {
+.hamburger .bar,
+.hamburger:after,
+.hamburger:before {
   content: '';
   display: block;
   width: 100%;
@@ -255,6 +356,13 @@ body {
   transform: rotate(45deg) translate(-7px, -5px);
 }
 
+@media (min-width:600px) {
+  .hamburger {
+    display: none;
+  }
+}
+
+/* Mobile Navigation Styles */
 .mobile-nav {
   position: fixed;
   left: 100%;
@@ -296,17 +404,4 @@ body {
   transform: scale(1.05) perspective(1px);
   box-shadow: 0 0 10px #26292c;
   transition: box-shadow 0.3s, transform 0.3s, background-color 0.3s;
-}
-
-
-@media (max-width:600px) {
-  .navbar ul {
-    display: none;
-  }
-}
-
-@media (min-width:600px) {
-  .hamburger {
-    display: none;
-  }
 }
