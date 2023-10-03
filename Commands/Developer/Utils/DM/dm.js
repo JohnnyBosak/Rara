@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, EmbedBuilder } = require("discord.js");
 
 module.exports = {
-  developer: true, 
+  developer: true,
   data: new SlashCommandBuilder()
     .setName("dm")
     .setDescription("Write a DM")
@@ -144,6 +144,12 @@ module.exports = {
             content: "Your message has been successfully sent to the user's DM",
             ephemeral: true
           });
+          await response.followUp({
+            embeds: [embedBuilder],
+            files: attachment ? [attachment] : [],
+            ephemeral: true
+          });
+
           return;
         } catch (error) {
           if (error.code === 'InteractionAlreadyReplied') {
@@ -166,6 +172,12 @@ module.exports = {
       }
 
       await response.reply({ content: "Your message has been successfully sent", ephemeral: true });
+      await response.followUp({
+        content: response.fields.getTextInputValue("say"),
+        files: attachment ? [attachment] : [],
+        ephemeral: true
+      });
+
       return;
     } catch (error) {
       if (error.code === 'InteractionAlreadyReplied') {
