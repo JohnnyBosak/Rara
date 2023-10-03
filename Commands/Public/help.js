@@ -18,6 +18,6 @@ module.exports = {
       .setTitle("Hey there, here are my commands")
       .setDescription(`${commandList}`)
       .setColor("DarkButNotBlack")
-    await interaction.reply({ embeds: [embed], ephemeral: true });
+    await interaction.reply({ embeds: [embed], ephemeral: false });
   },
 };
