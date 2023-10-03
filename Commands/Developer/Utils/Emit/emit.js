@@ -13,5 +13,9 @@ module.exports = {
   .addSubcommand((options) => 
     options
     .setName("leave")
-    .setDescription("Emit leaving message")),
+    .setDescription("Emit leaving message"))
+  .addSubcommand((options) => 
+    options
+    .setName("boost")
+    .setDescription("Emit boost message announcement")),
 }
