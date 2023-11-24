@@ -91,7 +91,7 @@ module.exports = {
         const attachment = await createWelcomeImage(member);
         const randomWelcomeMessage = getRandomWelcomeMessage(member);
         welcomeChannel.send({
-          content: randomWelcomeMessage,
+          content: "## " + randomWelcomeMessage,
           allowedMentions: { parse: [] },
           files: [attachment]
         });
