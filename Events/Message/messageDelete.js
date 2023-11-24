@@ -9,13 +9,6 @@ module.exports = {
    * @param {Message} message
    */
   async execute(message) {
-    const guildConfig = await database.findOne({
-      Guild: message.guild.id
-    });
-
-    const deletedMsgChannelLog = guildConfig ? message.guild.channels.cache.get(guildConfig.logChannel) : null;
-    if (!deletedMsgChannelLog) return;
-
     if (!message ||
         !message.guild ||
         !message.author ||
@@ -23,6 +16,13 @@ module.exports = {
         message.channel.type === "DM" ||
         chDontScan.some((element) => element === message.channel.id)
        ) return;
+
+    const guildConfig = await database.findOne({
+      Guild: message.guild.id
+    });
+
+    const deletedMsgChannelLog = guildConfig ? message.guild.channels.cache.get(guildConfig.logChannel) : null;
+    if (!deletedMsgChannelLog) return;
 
     // Log the deleted message
     const Log = new EmbedBuilder()
