@@ -6,14 +6,14 @@ module.exports = {
   async execute(message, client) {
     if (!message.guild || message.channel.type === "DM") return;
 
-    if (!message.author.bot && message.author.id !== client.user.id && message.guild.id === '429089094690275338' && scamLinks.some((scamLink) => message.content.toLowerCase().includes(scamLink))) {
+    if (!message.author.bot && message.author.id !== client.user.id && scamLinks.some((scamLink) => message.content.toLowerCase().includes(scamLink))) {
 
       message.delete().catch((err) => console.error("Error deleting message:", err));
 
       message.channel.send(`🛑 Attention ${message.author}! We take security seriously in this community. Please refrain from posting any links that may be considered scams or harmful. If you come across any suspicious content, make sure to report it to the moderators immediately. Let's keep this space safe and enjoyable for everyone! Thank you for your cooperation. 🚀`);
 
       const logChannel = message.guild.channels.cache.get('430778195789348874');
-      if (logChannel) {
+      if (logChannel && logChannel.guild.id === message.guild.id) {
         logChannel.send(`<@!408675103946178561>\n**Warning! Scam link detected in <#${message.channel.id}> from <@!${message.author.id}>**` + '\nMessage content:```' + `${message.content}` + '```');
       }
 
