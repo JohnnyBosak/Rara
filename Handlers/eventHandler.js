@@ -3,6 +3,8 @@ const { loadFiles } = require("../Functions/fileLoader");
 async function loadEvents(client) {
   console.time("Events Loaded");
 
+  client.events.clear();
+  
   client.events = new Map();
   const events = new Array();
 
