@@ -23,10 +23,16 @@ client.guildConfig = new Collection();
 const { connect } = require("mongoose");
 async function connectToDatabase() {
   try {
-    connect(process.env.database, {});
+    await connect(process.env.database, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 15000,
+    });
     console.log("The client is now connected to the Mongo database!");
-    } catch (error) { console.error("Error connecting to the database:", err);
-    setTimeout(connect, 5000);
+    } catch (error) { 
+    console.error("Error connecting to the database:", error);
+    console.log("Retrying connection in 5 seconds...");
+    setTimeout(connectToDatabase, 5000);
   }
 }
 connectToDatabase();
