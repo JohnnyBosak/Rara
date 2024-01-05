@@ -17,15 +17,25 @@ module.exports = {
       return;
     }
 
+    const keyToSearch = interaction.options.getString('key');
     const database = new db();
 
     try {
-      const keys = await database.list();
+      let keys;
+      const allKeys = await database.list();
 
-      if (keys.length === 0) {
+      if (allKeys.length === 0) {
         await interaction.reply("The database is empty.");
         return;
       }
+
+      if (keyToSearch) {
+        keys = await database.list(keyToSearch);
+        if (keys.length === 0) {
+          await interaction.reply("No matching keys found in the database.");
+          return;
+        }
+      } else { keys = allKeys; }
 
       const contents = {};
 
