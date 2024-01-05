@@ -37,7 +37,7 @@ module.exports = {
       }
         break;
       case "No" : {
-        const newNoCount = parseInt(noField.value) = + 1;
+        const newNoCount = parseInt(noField.value) + 1;
         noField.value = newNoCount;
         
         interaction.reply({content: VoteCountedReply, ephemeral: true});
@@ -46,4 +46,4 @@ module.exports = {
         break;
     }
   }
-}
+};
