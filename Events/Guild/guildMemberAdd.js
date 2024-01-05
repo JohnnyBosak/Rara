@@ -10,7 +10,7 @@ const RISK_LEVELS = [
   { threshold: moment().subtract(2, "months").unix(), color: "#e2bb1e", label: "Medium" },
   { threshold: 0, color: "#74e21e", label: "Fairly safe" },
 ];
-
+///*
 // Utility function to draw a rounded rectangle
 function drawRoundedRect(ctx, x, y, width, height, radius) {
   ctx.beginPath();
@@ -26,7 +26,7 @@ function drawRoundedRect(ctx, x, y, width, height, radius) {
   ctx.closePath();
   ctx.fill();
 }
-
+//*/
 // Utility function to get random welcome message
 function getRandomWelcomeMessage(member) {
   const welcomeMessage = [
@@ -88,12 +88,15 @@ module.exports = {
       const riskLevel = getRiskLevel(parseInt(member.user.createdTimestamp / 1000));
 
       if (welcomeChannel) {
-        const attachment = await createWelcomeImage(member);
+        const start = performance.now(); //
+        const welcomeImage = await createWelcomeImage(member); //
+        const end = performance.now(); //
+        console.log(`Time taken: ${end - start} milliseconds`); //
         const randomWelcomeMessage = getRandomWelcomeMessage(member);
         welcomeChannel.send({
           content: "## " + randomWelcomeMessage,
-          allowedMentions: { parse: [] },
-          files: [attachment]
+          allowedMentions: { parse: [] }, //
+          files: [welcomeImage] //
         });
       }
 
@@ -105,7 +108,7 @@ module.exports = {
     }
   },
 };
-
+///*
 async function createWelcomeImage(member) {
   const welcomeCanvas = {};
   welcomeCanvas.create = Canvas.createCanvas(1024, 500);
@@ -115,15 +118,22 @@ async function createWelcomeImage(member) {
 
   const background = member.guild.bannerURL() || "https://source.unsplash.com/random/?gaming";
 
-  await Canvas.loadImage(background).then(async (img) => {
-    welcomeCanvas.context.drawImage(img, 0, 0, 1024, 500);
+  try {
+    await Canvas.loadImage(background, { timeout: 30000 }).then(async (img) => {
+      welcomeCanvas.context.drawImage(img, 0, 0, 1024, 500);
 
-    // Set the fillStyle for welcome text to white
-    welcomeCanvas.context.beginPath();
-    welcomeCanvas.context.arc(512, 166, 128, 0, Math.PI * 2, true);
-    welcomeCanvas.context.stroke();
-    welcomeCanvas.context.fill();
-  });
+      // Set the fillStyle for welcome text to white
+      welcomeCanvas.context.beginPath();
+      welcomeCanvas.context.arc(512, 166, 128, 0, Math.PI * 2, true);
+      welcomeCanvas.context.stroke();
+      welcomeCanvas.context.fill();
+    });
+  } catch (error) {
+    console.error("Error loading image:", error);
+    // Handle the error as needed, or simply return an error image
+    // For example, you could create a default image or notify the user about the issue
+    return null;
+  }
 
   // Draw a rounded rectangle with transparent black fill
   welcomeCanvas.context.fillStyle = "rgba(0, 0, 0, 0.7)"; // Transparent black with increased transparency
@@ -159,10 +169,10 @@ async function createWelcomeImage(member) {
     name: "welcome.png",
   });
 
-  process.noDeprecation = true;
+  process.noDeprecation = false;
   return attachment;
 }
-
+//*/
 async function sendLogEmbed(member, riskLevel, assignedRole, accountCreation, joiningTime, logChannel) {
   const Embed = new EmbedBuilder()
     .setAuthor({
