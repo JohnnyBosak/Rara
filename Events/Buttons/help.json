@@ -1,0 +1,55 @@
+{
+  "menu": [
+    {
+      "label": "• Help Center",
+      "description": "Navigate to the Help Center.",
+      "value": "helpcenter",
+      "emoji": {
+        "name": "help",
+        "id": "1191847066960408648"
+      }
+    },
+    {
+      "label": "• Moderation",
+      "description": "Commands list for server moderation.",
+      "value": "moderation",
+      "emoji": {
+        "name": "discordstaff",
+        "id": "1102409253429448826"
+      }
+    },
+    {
+      "label": "• Emojis & Stickers",
+      "description": "Manage and customize server emojis and stickers.",
+      "value": "emoji",
+      "emoji": "😀"
+    },
+    {
+      "label": "• Music",
+      "description": "Commands list for audio.",
+      "value": "audio",
+      "emoji": "🎵"
+    },
+    {
+      "label": "• Entertainment",
+      "description": "Explore fun and entertaining commands.",
+      "value": "entertainment",
+      "emoji": "🎭"
+    },
+    {
+      "label": "• Giveaway",
+      "description": "Manage giveaways.",
+      "value": "giveaway",
+      "emoji": "🎉"
+    },
+    {
+      "label": "• Extra",
+      "description": "Additional commands",
+      "value": "extra",
+      "emoji": {
+        "name": "settings",
+        "id": "1192083464430833724"
+      }
+    }
+  ]
+}
