@@ -1,17 +1,11 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { ChatInputCommandInteraction } = require("discord.js");
 
 module.exports = {
-  developer: true,
-  data: new SlashCommandBuilder()
-    .setName("delete-server")
-    .setDescription("Delete a server")
-    .setDMPermission(true)
-    .addStringOption((options) => options
-      .setName("id")
-      .setDescription("Guild ID")
-      .setRequired(true)
-    ),
-
+  subCommand: "guild.delete",
+  /** 
+  *
+  * @param  {ChatInputCommandInteraction} interaction
+  */
   async execute(interaction, client) {
     await interaction.deferReply();
 
