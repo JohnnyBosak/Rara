@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 
 module.exports = {
+  developer: true,
   data: new SlashCommandBuilder()
   .setName("emit")
   .setDescription("Emit the guildMemberJoin/Left events.")
@@ -17,5 +18,10 @@ module.exports = {
   .addSubcommand((options) => 
     options
     .setName("boost")
-    .setDescription("Emit boost message announcement")),
-}
+    .setDescription("Emit boost message announcement"))
+  .addSubcommand((options) =>
+    options
+    .setName("rara_invited")
+    .setDescription("Emit rara_invited message"))                 
+  ,
+};
