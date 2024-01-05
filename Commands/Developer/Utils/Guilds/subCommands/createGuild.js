@@ -1,21 +1,34 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { ChatInputCommandInteraction } = require("discord.js");
+//const fs = require("fs");
+
+//const base64Data = fs.readFileSync("./rara_base64.txt", "utf-8").trim();
 
 module.exports = {
-  developer: true,
-  data: new SlashCommandBuilder()
-    .setName("create-server")
-    .setDescription("Create a server")
-    .setDMPermission(true),
-
+  subCommand: "guild.create",
+  /** 
+  *
+  * @param  {ChatInputCommandInteraction} interaction
+  */
   async execute(interaction) {
     await interaction.deferReply({ ephemeral: true });
 
+    let base64Data;
+
+    await fetch("https://cdn.discordapp.com/attachments/430778195789348874/1190376775755243722/base64.txt")
+      .then((response) => response.text())
+      .then((data) => {
+        base64Data = data.trim();
+      })
+      .catch((error) => {
+        console.error("Error fetching base64 data:", error);
+      });
+
     const data = {
       name: `Rara's server`,
-      icon: `https://cdn.discordapp.com/attachments/773079700180303882/1132807896338534521/Rara.png`,
+      icon: base64Data,
       channels: [],
       system_channel_id: null,
-      guild_template_code: `hSGVkZypKJas`,
+      guild_template_code: process.env.grom_template_code,
     };
 
     const headers = {
@@ -23,7 +36,7 @@ module.exports = {
       Authorization: `Bot ${process.env.token}`,
     };
 
-    fetch(`https://discord.com/api/v9/guilds/templates/hSGVkZypKJas`, {
+    fetch(`https://discord.com/api/v9/guilds/templates/${data.guild_template_code}`, {
       method: "POST",
       headers: headers,
       body: JSON.stringify(data),
