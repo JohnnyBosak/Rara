@@ -9,8 +9,7 @@ module.exports = {
   */
   execute(interaction, client) {
     client.emit("guildMemberAdd", interaction.member);
-    return;
 
-    //interaction.reply({content: "Emitted GuildMemberJoin", ephemeral: true});
+    interaction.reply({content: "Emitted GuildMemberJoin", ephemeral: true});
   }
 }
