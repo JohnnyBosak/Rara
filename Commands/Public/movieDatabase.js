@@ -17,7 +17,7 @@ module.exports = {
 
     const { options, member, guild } = interaction;
     const name = options.getString("name");
-    const apiUrl = `https://api.themoviedb.org/3/search/movie?api_key=${themvoiedbapi}&query=${encodeURIComponent(name)}`;
+    const apiUrl = `https://api.themoviedb.org/3/search/multi?api_key=${themvoiedbapi}&query=${encodeURIComponent(name)}`;
     const response = await axios.get(apiUrl);
 
     const movie = response.data.results[0];
@@ -25,7 +25,8 @@ module.exports = {
     if (movie) {
       const starRating = generateStarRating(movie.vote_average);
 
-      const url = `https://www.themoviedb.org/movie/${movie.id}`
+      const url = `https://www.themoviedb.org/${movie.media_type}/${movie.id}`
+      const release_date = movie.release_date || movie.first_air_date;
 
       const row = new ActionRowBuilder()
         .addComponents(
@@ -37,11 +38,11 @@ module.exports = {
 
       const embed = new EmbedBuilder()
         .setAuthor({ name: "Movie Command", iconURL: guild.iconURL({ size: 2048 }) })
-        .setTitle(movie.title)
-        .setURL(`https://www.themoviedb.org/movie/${movie.id}`)
+        .setTitle(movie.title || movie.name)
+        .setURL(`https://www.themoviedb.org/${movie.media_type}/${movie.id}`)
         .setImage(`https://image.tmdb.org/t/p/w500${movie.poster_path}`)
         .addFields(
-          { name: "Release Date", value: `**${movie.release_date}**` },
+          { name: "Release Date", value: `**${release_date}**`},
           { name: "Overview (Description)", value: `**${movie.overview}**` },
           { name: "Popular! <:fire:1172622913212514375>", value: `**${movie.popularity}**` },
           { name: `Language <:language:1172623212039905280>`, value: `**${movie.original_language}**` },
