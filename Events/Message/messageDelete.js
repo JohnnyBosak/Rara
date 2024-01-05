@@ -1,7 +1,7 @@
 const { EmbedBuilder, Message } = require("discord.js");
-const config = require("../../config.json");
-const chDontScan = config.chDontScan;
-const database = require("../../Schemas/DelMSGLog");
+
+const { chDontScan } = require("../../config.json");
+const database = require("../../Schemas/MSGLog");
 
 module.exports = {
   name: "messageDelete",
@@ -10,18 +10,18 @@ module.exports = {
    */
   async execute(message) {
     if (!message ||
-        !message.guild ||
-        !message.author ||
-        message.author.bot ||
-        message.channel.type === "DM" ||
-        chDontScan.some((element) => element === message.channel.id)
-       ) return;
+      !message.guild ||
+      !message.author ||
+      message.author.bot ||
+      message.channel.type === "DM" ||
+      chDontScan.some((element) => element === message.channel.id)
+     ) return;
 
     const guildConfig = await database.findOne({
       Guild: message.guild.id
     });
 
-    const deletedMsgChannelLog = guildConfig ? message.guild.channels.cache.get(guildConfig.logChannel) : null;
+    const deletedMsgChannelLog = guildConfig ? message.guild.channels.cache.get(guildConfig.del_logChannel) : null;
     if (!deletedMsgChannelLog) return;
 
     // Log the deleted message
@@ -47,7 +47,7 @@ module.exports = {
 
     if (message.attachments.size >= 1) {
       Log.addFields({
-        name: "Attachments :",
+        name: "Attachments:",
         value: message.attachments.map((a) => a.url).join("\n"),
         inline: true,
       });
