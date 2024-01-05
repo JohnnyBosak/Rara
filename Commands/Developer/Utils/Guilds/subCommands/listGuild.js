@@ -1,10 +1,11 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { ChatInputCommandInteraction, EmbedBuilder } = require("discord.js");
 
 module.exports = {
-  developer: true,
-  data: new SlashCommandBuilder()
-    .setName("listguilds")
-    .setDescription("Lists all guilds Rara is in."),
+  subCommand: "guild.list",
+  /** 
+  *
+  * @param  {ChatInputCommandInteraction} interaction
+  */
   async execute(interaction) {
     try {
       const guilds = interaction.client.guilds.cache;
