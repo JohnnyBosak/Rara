@@ -1,4 +1,4 @@
-const { ChatInputCommandInteraction, Client } = require("discord.js");
+const { ChatInputCommandInteraction, Collection, Client } = require("discord.js");
 
 module.exports = {
   subCommand: "emit.boost",
@@ -8,9 +8,11 @@ module.exports = {
   * @param {Client} client
   */
   execute(interaction, client) {
-    client.emit("guildMemberUpdate", interaction.member);
-    return;
+    const oldMember = interaction.guild.members.cache.get('408675103946178561');
+    const newMember = interaction.guild.members.cache.get('772939602863587368');
 
-    //interaction.reply({content: "Emitted guildMemberUpdate", ephemeral: true});
+    client.emit("guildMemberUpdate", oldMember, newMember);
+    
+    interaction.reply({ content: "Emitted guildMemberUpdate", ephemeral: true });
   }
-}
+};
