@@ -27,7 +27,7 @@ module.exports = {
     const user = interaction.options.getUser("user");
     if (user.bot) {
       await interaction.reply({
-        content: "Sorry, I cannot send messages to other bots.",
+        content: "Sorry, I cannot send messages to bots.",
         ephemeral: true
       });
       return;
