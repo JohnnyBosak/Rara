@@ -34,7 +34,7 @@ module.exports = {
         .setDescription("Set the role to be automatically added to new members.")
       )
       .addRoleOption((options) => options
-        .setName("bot_role_add")        
+        .setName("bot_role_add")
         .setDescription("Set the role to be automatically added to new bots.")
       )
       .addChannelOption((options) => options
@@ -61,6 +61,15 @@ module.exports = {
       .addChannelOption((options) => options
         .setName("log_channel")
         .setDescription("Select the logging channel for the boost event.")
+        .addChannelTypes(ChannelType.GuildText)
+      )
+    )
+    .addSubcommand((subcommand) => subcommand
+      .setName("ban_log")
+      .setDescription("Configure the logging channel for the ban/unban event.")
+      .addChannelOption((options) => options
+        .setName("channel")
+        .setDescription("Select the channel where the ban/unban event will be logged.")
         .addChannelTypes(ChannelType.GuildText)
       )
     ),
