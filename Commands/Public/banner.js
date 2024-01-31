@@ -183,8 +183,6 @@ module.exports = {
 
       // Send the generated banner image as an attachment to the user.
       await interaction.editReply({
-        content: `${interaction.user} your requested banner has been created`,
-        allowedMentions: { users: [] }, // Exclude user mentions
         embeds: [
           new EmbedBuilder()
             .setColor(borderColor)
@@ -194,7 +192,7 @@ module.exports = {
       });
     } catch (error) {
       console.error(error);
-      await interaction.followUp({ content: "Failed to generate banner image." });
+      await interaction.editReply({ content: "Failed to generate banner image." });
     }
   }
 };
