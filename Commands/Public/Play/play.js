@@ -33,15 +33,15 @@ module.exports = {
             });
         }
 
+        interaction.reply({
+            content: "<:music:1202180879883960330> Request received",
+            ephemeral: true
+            });
+
         try {
             await client.distube.play(voiceChannel, query, {
                 textChannel: channel,
                 member: member
-            });
-
-            interaction.reply({
-                content: "<:music:1202180879883960330> Request received",
-                ephemeral: true
             });
 
         } catch (error) {
@@ -56,7 +56,7 @@ module.exports = {
                 embed.setColor("#457cf0").setDescription("⛔ | Something went wrong...");
             }
 
-            return interaction.reply({
+            return interaction.followUp({
                     embeds: [embed],
                     ephemeral: true
                 });
