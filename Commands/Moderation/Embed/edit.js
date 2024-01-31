@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
-const { checkLength } = require("./say");
+const { safeJSONParse, checkLength, checkEmbed, hexToDecimal, createEmbedObjects } = require("./say");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -26,65 +26,60 @@ module.exports = {
 
   async execute(interaction) {
     const { options } = interaction;
+    const embedJSONString = options.getString("embed");
     const channel = options.getChannel("channel") || interaction.channel;
     const messageId = options.getString("message-id");
-    const embedJSONString = options.getString("embed");
     const attachment = options.getAttachment("file") || null;
 
     try {
-      const embedJSON = JSON.parse(embedJSONString);
       const messageToEdit = await channel.messages.fetch(messageId);
+ 
+    if (attachment?.size > 25 * 1024 * 1024) {
+      throw new Error("Attachment size cannot exceed 25 MB.");
+    }
 
-      if (embedJSON.embeds?.length > 10) {
-        throw new Error("You cannot send more than 10 embeds in a single message.");
+    let contentToSend = {
+      files: attachment ? [{ attachment: attachment.url, name: attachment.name }] : []
+    };
+
+      const embedJSON = safeJSONParse(embedJSONString);
+
+      if (embedJSON === null || typeof embedJSON === 'number') {
+          checkLength(embedJSONString, 2000, `Message cannot exceed 2000 characters.`);
+          await messageToEdit.edit({ ...contentToSend, content: embedJSONString });
+          await interaction.reply({
+              content: `Message edited in ${messageToEdit.url}\nYou can use https://eb.nadeko.bot/ to send additional embed messages.`,
+              ephemeral: true
+          });
+          return;
       }
-      if (embedJSON.content?.length > 2000) {
-        throw new Error("Content cannot exceed maximum length of 2000.");
+
+    checkLength(embedJSON.content, 2000, `Content cannot exceed 2000 characters.`);
+
+     if (embedJSON.content && !embedJSON.embeds) {
+        await messageToEdit.edit({ ...contentToSend, content: embedJSON.content });
+        await interaction.reply({
+          content: `Message edited in ${messageToEdit.url}\nYou can use https://eb.nadeko.bot/ to send additional embed messages.`,
+          ephemeral: true
+        });
+        return;
       }
-      if (attachment && attachment.size > 25 * 1024 * 1024) {
-        throw new Error("Attachment size cannot exceed 25MB.");
-      }
+    
+      checkLength(embedJSON.embeds, 10, `You cannot send more than 10 embeds in a single message.`);
 
       embedJSON.embeds?.forEach((embed, index) => {
-        checkLength(embed.title, 256, `Embed ${index + 1}: The title cannot exceed 256 characters.`);
-        checkLength(embed.description, 4096, `Embed ${index + 1}: The description cannot exceed 4096 characters.`);
-        checkLength(embed.footer?.text, 2048, `Embed ${index + 1}: The footer text cannot exceed 2048 characters.`);
-        checkLength(embed.author?.name, 256, `Embed ${index + 1}: The author name cannot exceed 256 characters.`);
-        checkLength(embed.fields, 25, `Embed ${index + 1}: The embed cannot have more than 25 fields.`);
+          checkEmbed(embed, index);
       });
 
-      const embeds = embedJSON.embeds || [];
-      const embedObjects = embeds.map((embed) => ({
-        color: embed.color || null,
-        title: embed.title || null,
-        url: embed.url || null,
-        author: {
-          name: embed.author?.name || null,
-          icon_url: embed.author?.icon_url || null,
-          url: embed.author?.url || null,
-        },
-        description: embed.description || null,
-        thumbnail: {
-          url: embed.thumbnail?.url || null,
-        },
-        fields: embed.fields || [],
-        image: {
-          url: embed.image?.url || null,
-        },
-        timestamp: embed.timestamp ? new Date(embed.timestamp).toISOString() : null,
-        footer: {
-          text: embed.footer?.text || null,
-          icon_url: embed.footer?.icon_url || null,
-        },
-      }));
+      const embedObjects = createEmbedObjects(embedJSON.embeds);
 
-      await messageToEdit.edit({
-        content: embedJSON.content,
+      await messageToEdit.edit({...contentToSend,
+        content: embedJSON.content  || null,
         embeds: embedObjects,
-        files: attachment ? [{ attachment: attachment.url, name: attachment.name }] : []
       });
+
       await interaction.reply({
-        content: `Message edited in https://discord.com/channels/${channel.guild.id}/${channel.id}/${messageId}`,
+        content: `Message edited in ${messageToEdit.url}`,
         ephemeral: true
       });
     } catch (error) {
