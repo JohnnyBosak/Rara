@@ -76,7 +76,7 @@ module.exports = {
       .setDescription('The file to upload')
       .setRequired(false))
     .addBooleanOption((option) => option
-      .setName('suppress_notifications')
+      .setName('mentions_notification')
       .setDescription('Prevent notifications when mentions are present in the message content.')
       .setRequired(false)
     ),
@@ -91,7 +91,7 @@ module.exports = {
     const embedJSONString = options.getString("message");
     const channel = options.getChannel("channel") || interaction.channel;
     const attachment = options.getAttachment("file") || null;
-    const suppress = options.getBoolean("suppress_notifications", false);
+    const suppress = options.getBoolean("mentions_notification", false);
       
       try {
     if (attachment?.size > 25 * 1024 * 1024) {
