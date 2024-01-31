@@ -130,24 +130,23 @@ disClient.distube
   .on('finish', async (queue) => {
     if (queue.currentMessage && (queue.songs.length === 0 || queue.songs.length === 1)) {
         const messageObject = await sendMusicCard(progression = 100, queue, song = queue.songs[0], setDisabled = true);
-        try {
-      const fetchedMessage = await queue.textChannel.messages.fetch(queue.currentMessage.id);
-
-      // Edit the music card along with the playSong event
-      fetchedMessage.edit({
-        content: '🏁 Queue finished!',
-        components: messageObject.components,
-        files: messageObject.files
-      });
-    } catch (error) {
-      // If the message doesn't exist, send a new one
-      queue.textChannel.send({
-        content: '🏁 Queue finished!',
-        components: messageObject.components,
-        files: messageObject.files
-      });
+        
+        queue.currentMessage.edit({
+            content: '🏁 Queue finished!',
+            components: messageObject.components,
+            files: messageObject.files
+        }).catch(error => {
+        if (error.code === 10008) {
+            queue.textChannel.send({
+                content: '🏁 Queue finished!',
+                components: messageObject.components,
+                files: messageObject.files
+                });
+            } else {
+                console.log(error);
+            }
+        });
     }
-  } 
     if (queue.connection) { queue.connection.disconnect(); }
   });
 
