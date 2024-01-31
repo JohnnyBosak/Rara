@@ -16,8 +16,8 @@ module.exports = {
       .setDescription("ID of the message to be edited")
       .setRequired(true))
     .addStringOption((options) => options
-      .setName("embed")
-      .setDescription("New embedded content in JSON format")
+      .setName("new-message")
+      .setDescription("New message content in JSON format")
       .setRequired(true))
     .addAttachmentOption((option) => option
       .setName('file')
@@ -26,7 +26,7 @@ module.exports = {
 
   async execute(interaction) {
     const { options } = interaction;
-    const embedJSONString = options.getString("embed");
+    const embedJSONString = options.getString("new-message");
     const channel = options.getChannel("channel") || interaction.channel;
     const messageId = options.getString("message-id");
     const attachment = options.getAttachment("file") || null;
