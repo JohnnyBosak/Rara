@@ -7,7 +7,7 @@ api = process.env.wallhaven_api; //Your wallhaven api
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("image")
-    .setDescription("See a hot image from wallhaven")
+    .setDescription("Get an image from wallhaven")
     .setDMPermission(false)
     .addStringOption((option) =>
       option.setName("search")
