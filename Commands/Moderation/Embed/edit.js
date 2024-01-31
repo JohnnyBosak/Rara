@@ -17,7 +17,7 @@ module.exports = {
       .setRequired(true))
     .addStringOption((options) => options
       .setName("new-message")
-      .setDescription("New message content in JSON format")
+      .setDescription("New message content (use https://eb.nadeko.bot/ for embed JSON data)")
       .setRequired(true))
     .addAttachmentOption((option) => option
       .setName('file')
