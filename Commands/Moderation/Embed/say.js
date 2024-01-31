@@ -64,8 +64,8 @@ module.exports = {
     .setDMPermission(false)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
     .addStringOption((options) => options
-      .setName("embed")
-      .setDescription("Embed JSON data")
+      .setName("message")
+      .setDescription("Message to send (use https://eb.nadeko.bot/ for embed JSON data)")
       .setRequired(true))
     .addChannelOption((options) => options
       .setName("channel")
@@ -88,7 +88,7 @@ module.exports = {
 
   async execute(interaction) {
     const { options } = interaction;
-    const embedJSONString = options.getString("embed");
+    const embedJSONString = options.getString("message");
     const channel = options.getChannel("channel") || interaction.channel;
     const attachment = options.getAttachment("file") || null;
     const suppress = options.getBoolean("suppress_notifications", false);
