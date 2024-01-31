@@ -1,9 +1,60 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 
+function safeJSONParse(jsonString) {
+    try {
+        return JSON.parse(jsonString);
+    } catch (error) {
+        return null;
+    }
+}
+
 function checkLength(value, maxLength, errorMessage) {
   if (value && value.length > maxLength) {
     throw new Error(errorMessage);
   }
+}
+
+function checkEmbed(embed, index) {
+  checkLength(embed.title, 256, `Embed ${index + 1}: The title cannot exceed 256 characters.`);
+  checkLength(embed.description, 4096, `Embed ${index + 1}: The description exceed 4096 characters.`);
+  checkLength(embed.footer?.text, 2048, `Embed ${index + 1}: The footer text exceed 2048 characters.`);
+  checkLength(embed.author?.name, 256, `Embed ${index + 1}: The author name exceed 256 characters.`);
+
+  // Check each field in the embed
+  embed.fields?.forEach((field, fieldIndex) => {
+    checkLength(field.name, 256, `Embed ${index + 1}, Field ${fieldIndex + 1}: The field name cannot exceed 256 characters.`);
+    checkLength(field.value, 1024, `Embed ${index + 1}, Field ${fieldIndex + 1}: The field value exceed 1024 characters.`);
+  });
+
+  checkLength(embed.fields, 25, `Embed ${index + 1}: The embed cannot have more than 25 fields.`);
+}
+
+function hexToDecimal(hexColor) {
+  hexColor = hexColor.replace(/^#/, '');
+  const decimalColor = parseInt(hexColor, 16);
+  return decimalColor;
+}
+
+function createEmbedObjects(embeds) {
+  return embeds?.map((embed) => {
+    if (embed.color) {
+      const isHexColor = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(embed.color);
+      embed.color = isHexColor ? hexToDecimal(embed.color) : embed.color;
+    }
+
+    return {
+      color: embed.color || null,
+      title: embed.title || null,
+      url: embed.url || null,
+      author: embed.author,
+      description: embed.description || null,
+      thumbnail: { url: embed.thumbnail?.url || embed.thumbnail || null },
+      fields: embed.fields || [],
+      image: { url: embed.image?.url || embed.image || null },
+      timestamp: embed.timestamp ? new Date(embed.timestamp).toISOString() : null,
+      footer: embed.footer,
+    };
+  }) || [];
 }
 
 module.exports = {
@@ -29,70 +80,67 @@ module.exports = {
       .setDescription('Prevent notifications when mentions are present in the message content.')
       .setRequired(false)
     ),
+  safeJSONParse,
   checkLength,
+  checkEmbed,
+  hexToDecimal,
+  createEmbedObjects,
 
   async execute(interaction) {
     const { options } = interaction;
     const embedJSONString = options.getString("embed");
     const channel = options.getChannel("channel") || interaction.channel;
     const attachment = options.getAttachment("file") || null;
-    const suppress = options.getBoolean("suppress_notifications") || false;
+    const suppress = options.getBoolean("suppress_notifications", false);
+      
+      try {
+    if (attachment?.size > 25 * 1024 * 1024) {
+      throw new Error("Attachment size cannot exceed 25 MB.");
+    }
 
-    try {
-      const embedJSON = JSON.parse(embedJSONString);
+    let contentToSend = {
+      allowedMentions: suppress ? { parse: [] } : null,
+      files: attachment ? [{ attachment: attachment.url, name: attachment.name }] : []
+    };
 
-      if (embedJSON.embeds?.length > 10) {
-        throw new Error("You cannot send more than 10 embeds in a single message.");
+      const embedJSON = safeJSONParse(embedJSONString);
+      
+      if (embedJSON === null || typeof embedJSON === 'number') {
+          checkLength(embedJSONString, 2000, `Message cannot exceed 2000 characters.`);
+          const sentMessage = await channel.send({ ...contentToSend, content: embedJSONString });
+          await interaction.reply({
+              content: `Message sent to ${sentMessage.url}\nYou can use https://eb.nadeko.bot/ to send additional embed messages.`,
+              ephemeral: true
+          });
+          return;
       }
-      if (embedJSON.content?.length > 2000) {
-        throw new Error("Content cannot exceed maximum length of 2000.");
+      
+    checkLength(embedJSON.content, 2000, `Content cannot exceed 2000 characters.`);
+    
+     if (embedJSON.content && !embedJSON.embeds) {
+        const sentMessage = await channel.send({ ...contentToSend, content: embedJSON.content });
+        await interaction.reply({
+          content: `Message sent to ${sentMessage.url}\nYou can use https://eb.nadeko.bot/ to send additional embed messages.`,
+          ephemeral: true
+        });
+        return;
       }
-      if (attachment && attachment.size > 25 * 1024 * 1024) {
-        throw new Error("Attachment size cannot exceed 25MB.");
-      }
+    
+      checkLength(embedJSON.embeds, 10, `You cannot send more than 10 embeds in a single message.`);
 
       embedJSON.embeds?.forEach((embed, index) => {
-        checkLength(embed.title, 256, `Embed ${index + 1}: The title cannot exceed 256 characters.`);
-        checkLength(embed.description, 4096, `Embed ${index + 1}: The description exceed 4096 characters.`);
-        checkLength(embed.footer?.text, 2048, `Embed ${index + 1}: The footer text exceed 2048 characters.`);
-        checkLength(embed.author?.name, 256, `Embed ${index + 1}: The author name exceed 256 characters.`);
-        checkLength(embed.fields, 25, `Embed ${index + 1}: The embed cannot have more than 25 fields.`);
+          checkEmbed(embed, index);
       });
 
-      const embeds = embedJSON.embeds || [];
-      const embedObjects = embeds.map((embed) => ({
-        color: embed.color || null,
-        title: embed.title || null,
-        url: embed.url || null,
-        author: {
-          name: embed.author?.name || null,
-          icon_url: embed.author?.icon_url || null,
-          url: embed.author?.url || null,
-        },
-        description: embed.description || null,
-        thumbnail: {
-          url: embed.thumbnail?.url || null,
-        },
-        fields: embed.fields || [],
-        image: {
-          url: embed.image?.url || null,
-        },
-        timestamp: embed.timestamp ? new Date(embed.timestamp).toISOString() : null,
-        footer: {
-          text: embed.footer?.text || null,
-          icon_url: embed.footer?.icon_url || null,
-        },
-      }));
+      const embedObjects = createEmbedObjects(embedJSON.embeds);
 
-      const sentMessage = await channel.send({
-        content: embedJSON.content,
-        allowedMentions: suppress ? { parse: [] } : null,
+      const sentMessage = await channel.send({...contentToSend,
+        content: embedJSON.content || null,
         embeds: embedObjects,
-        files: attachment ? [{ attachment: attachment.url, name: attachment.name }] : []
       });
 
       await interaction.reply({
-        content: `Message sent to https://discord.com/channels/${channel.guild.id}/${channel.id}/${sentMessage.id}`,
+        content: `Message sent to ${sentMessage.url}`,
         ephemeral: true
       });
     } catch (error) {
