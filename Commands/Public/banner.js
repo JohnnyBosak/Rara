@@ -1,33 +1,7 @@
 const { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, AttachmentBuilder, PermissionFlagsBits } = require("discord.js");
 const { profileImage } = require("discord-arts");
 
-const colorChoices = [
-  { name: 'AliceBlue', value: '#F0F8FF' },
-  { name: 'AntiqueWhite', value: '#FAEBD7' },
-  { name: 'Aqua', value: '#00FFFF' },
-  { name: 'Black ', value: '#000000' },
-  { name: 'Blue', value: '#0000FF' },
-  { name: 'Blue Romance', value: '#D3FFCE' },
-  { name: 'Dim Gray', value: '#666666' },
-  { name: 'Elite Teal', value: '#133337' },
-  { name: 'Gold', value: '#FFD700' },
-  { name: 'Kerbal', value: '#BADA55' },
-  { name: 'Lavender', value: '#E6E6FA' },
-  { name: 'Lime Green', value: '#065535' },
-  { name: 'MistyRose', value: '#FFE4E1' },
-  { name: 'Orange', value: '#FFA500' },
-  { name: 'Pale Blue', value: '#C6E2FF' },
-  { name: 'Pale Magenta', value: '#FF80ED' },
-  { name: 'Pink', value: '#FF69B4' },
-  { name: 'PowderBlue', value: '#B0E0E6' },
-  { name: 'Prussian Blue', value: '#003366' },
-  { name: 'Purple', value: '#800080' },
-  { name: 'Red', value: '#FF0000' },
-  { name: 'Salmon', value: '#FF7373' },
-  { name: 'Teal ', value: '#008080' },
-  { name: 'Turquoise', value: '#40E0D0' },
-  { name: 'White', value: '#FFFFFF' },
-];
+const colorChoices = require("../../colors.json");
 const DEFAULT_BACKGROUND_IMAGE_URL = "https://i.imgur.com/DGA63O0.jpg";
 const WHITE = "#FFFFFF";
 
@@ -45,7 +19,8 @@ module.exports = {
       option.setName("border-color")
         .setDescription("Color of your image border.")
         .setRequired(true)
-        .addChoices(...colorChoices.map(choice => ({ name: choice.name, value: choice.value })))
+        .setAutocomplete(true)
+        //.addChoices(...colorChoices.map(choice => ({ name: choice.name, value: choice.value })))
     )
     .addStringOption(option =>
       option.setName("background-image")
@@ -55,7 +30,8 @@ module.exports = {
       option.setName("username-color")
         .setDescription("Color of your username.")
         .setRequired(false)
-        .addChoices(...colorChoices.map(choice => ({ name: choice.name, value: choice.value })))
+        .setAutocomplete(true)
+        //.addChoices(...colorChoices.map(choice => ({ name: choice.name, value: choice.value })))
     )
     .addStringOption(option =>
       option.setName("tag-text")
@@ -65,7 +41,8 @@ module.exports = {
       option.setName("tag-color")
         .setDescription("Color of your tag.")
         .setRequired(false)
-        .addChoices(...colorChoices.map(choice => ({ name: choice.name, value: choice.value })))
+        .setAutocomplete(true)
+        //.addChoices(...colorChoices.map(choice => ({ name: choice.name, value: choice.value })))
     )
     .addStringOption(option =>
       option.setName("badges")
@@ -79,7 +56,8 @@ module.exports = {
       option.setName("border-color2")
         .setDescription("Second color of your image border.")
         .setRequired(false)
-        .addChoices(...colorChoices.map(choice => ({ name: choice.name, value: choice.value })))
+        .setAutocomplete(true)
+        //.addChoices(...colorChoices.map(choice => ({ name: choice.name, value: choice.value })))
     )
     .addBooleanOption(option =>
       option.setName("square-avatar")
@@ -101,6 +79,15 @@ module.exports = {
    * Executes the banner command and generates a banner image for the specified user with the provided options.
    * @param {ChatInputCommandInteraction} interaction The interaction object representing the slash command invocation.
    */
+  async autocomplete(interaction) {
+    const focusedOption = interaction.options.getFocused();
+
+    const filtered = colorChoices.filter(choice => choice.name.toLowerCase().startsWith(focusedOption.toLowerCase()));
+    await interaction.respond(
+        (filtered.map(choice => ({ name: choice.name, value: choice.value }))).slice(0, 25)
+    );
+  },
+
   async execute(interaction) {
     await interaction.deferReply();
 
@@ -194,5 +181,5 @@ module.exports = {
       console.error(error);
       await interaction.editReply({ content: "Failed to generate banner image." });
     }
-  }
+  },
 };
