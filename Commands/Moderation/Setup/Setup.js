@@ -18,7 +18,7 @@ module.exports = {
       .addChannelOption((options) => options
         .setName("edited-messages")
         .setDescription("Set the channel where the edited messages will be logged")
-        .addChannelTypes(ChannelType.GuildText, ChannelType.PublicThread)
+        .addChannelTypes(ChannelType.GuildText)
         .setRequired(false))
     )
     .addSubcommand((subcommand) => subcommand
@@ -27,7 +27,7 @@ module.exports = {
       .addChannelOption((options) => options
         .setName("log_channel")
         .setDescription("Select the logging channel for this system.")
-        .addChannelTypes(ChannelType.GuildText)
+        .addChannelTypes(ChannelType.GuildText, ChannelType.PublicThread)
       )
       .addRoleOption((options) => options
         .setName("member_role_add")
