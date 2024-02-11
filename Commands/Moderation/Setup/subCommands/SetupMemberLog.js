@@ -33,10 +33,10 @@ module.exports = {
       .setColor("Green")
       .setAuthor({ name: "Welcome system", iconURL: "https://media.discordapp.net/attachments/430778195789348874/1138012783993163807/welcome.gif" })
       .setDescription([
-        `- Member Logging Channel Updated: ${logChannel ? `<#${logChannel}>` : "Not Specified."}`,
-        `- Member Auto-Role Updated: ${memberRole ? `<@&${memberRole}>` : "Not Specified."}`,
-        `- Bot Auto-Role Updated: ${botRole ? `<@&${botRole}>` : "Not Specified."}`,
-        `- Welcome channel Updated: ${welcomeChannel ? `<#${welcomeChannel}>` : "Not Specified."}`
+        `- Member Logging Channel: ${logChannel ? `<#${logChannel}>` : "Not Specified."}`,
+        `- Member Join-Role: ${memberRole ? `<@&${memberRole}>` : "Not Specified."}`,
+        `- Bot Join-Role: ${botRole ? `<@&${botRole}>` : "Not Specified."}`,
+        `- Welcome Channel: ${welcomeChannel ? `<#${welcomeChannel}>` : "Not Specified."}`
       ].join("\n"));
 
     return interaction.reply({ embeds: [Embed] });
