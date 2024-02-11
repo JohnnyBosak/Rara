@@ -18,7 +18,7 @@ module.exports = {
       .addChannelOption((options) => options
         .setName("edited-messages")
         .setDescription("Set the channel where the edited messages will be logged")
-        .addChannelTypes(ChannelType.GuildText)
+        .addChannelTypes(ChannelType.GuildText, ChannelType.PublicThread)
         .setRequired(false))
     )
     .addSubcommand((subcommand) => subcommand
