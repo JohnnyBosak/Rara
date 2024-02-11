@@ -109,7 +109,7 @@ module.exports = {
           checkLength(embedJSONString, 2000, `Message cannot exceed 2000 characters.`);
           const sentMessage = await channel.send({ ...contentToSend, content: embedJSONString });
           await interaction.reply({
-              content: `Message sent to ${sentMessage.url}\nYou can use https://eb.nadeko.bot/ to send additional embed messages.`,
+              content: `Message sent to ${sentMessage.url}\nYou can use https://eb.nadeko.bot/ to send embed messages.`,
               ephemeral: true
           });
           return;
@@ -120,7 +120,7 @@ module.exports = {
      if (embedJSON.content && !embedJSON.embeds) {
         const sentMessage = await channel.send({ ...contentToSend, content: embedJSON.content });
         await interaction.reply({
-          content: `Message sent to ${sentMessage.url}\nYou can use https://eb.nadeko.bot/ to send additional embed messages.`,
+          content: `Message sent to ${sentMessage.url}\nYou can use https://eb.nadeko.bot/ to send embed messages.`,
           ephemeral: true
         });
         return;
