@@ -27,7 +27,7 @@ module.exports = {
       .addChannelOption((options) => options
         .setName("log_channel")
         .setDescription("Select the logging channel for this system.")
-        .addChannelTypes(ChannelType.GuildText, ChannelType.PublicThread)
+        .addChannelTypes(ChannelType.GuildText, ChannelType.PrivateThread)
       )
       .addRoleOption((options) => options
         .setName("member_role_add")
