@@ -46,7 +46,7 @@ module.exports = {
 
       if (embedJSON === null || typeof embedJSON === 'number') {
           checkLength(embedJSONString, 2000, `Message cannot exceed 2000 characters.`);
-          await messageToEdit.edit({ ...contentToSend, content: embedJSONString });
+          await messageToEdit.edit({ ...contentToSend, content: embedJSONString, embeds: null });
           await interaction.reply({
               content: `Message edited in ${messageToEdit.url}\nYou can use https://eb.nadeko.bot/ to send embed messages.`,
               ephemeral: true
@@ -57,7 +57,7 @@ module.exports = {
     checkLength(embedJSON.content, 2000, `Content cannot exceed 2000 characters.`);
 
      if (embedJSON.content && !embedJSON.embeds) {
-        await messageToEdit.edit({ ...contentToSend, content: embedJSON.content });
+        await messageToEdit.edit({ ...contentToSend, content: embedJSON.content, embeds: null });
         await interaction.reply({
           content: `Message edited in ${messageToEdit.url}\nYou can use https://eb.nadeko.bot/ to send embed messages.`,
           ephemeral: true
