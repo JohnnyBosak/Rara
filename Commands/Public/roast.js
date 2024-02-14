@@ -23,5 +23,5 @@ module.exports = {
           .setDescription(`${json.insult}`)
         interaction.reply({ content: `${user}`, embeds: [embed] });
       });
-  }
+  },
 };
