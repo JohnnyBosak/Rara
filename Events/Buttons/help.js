@@ -240,6 +240,8 @@ function extraEmbed() {
       <:note:1191791899690934292> Get Rara's invite link.\n
       <:cursor:1192089502299201609> stealsticker\r
       <:note:1191791899690934292> Steal a sticker sent in the chat.\n
+      <:cursor:1192089502299201609> thread\r
+      <:note:1191791899690934292> Create a thread from a message sent in the chat.\n
       `)
     .setColor('#000000')
     .setTitle('> Extra Commands')
@@ -260,6 +262,8 @@ function moderationEmbed1() {
     <:note:1191791899690934292> Manage automatic moderation for spam messages.\n
     <:console:1191791719818203238> </clear:1191037217708195902>\r
     <:note:1191791899690934292> Delete multiple messages in a channel.\n
+    <:console:1191791719818203238> </setup ban_log:1191037217708195901>\r
+    <:note:1191791899690934292> Set up a ban/unban log channel.\n
     <:console:1191791719818203238> </setup booster:1191037217708195901>\r
     <:note:1191791899690934292> Configure boost logging system for your guild.\n
     <:console:1191791719818203238> </setup welcome:1191037217708195901>\r
@@ -277,9 +281,9 @@ function moderationEmbed2() {
     .setDescription(`
 <:console:1191791719818203238> </timeout:1115039460908880019>\r
 <:note:1191791899690934292> Restrict a member's ability to communicate temporarily\n
-<:console:1191791719818203238> </kick:1191037217708195902>\r
+<:console:1191791719818203238> </kick:1206662524502802442>\r
 <:note:1191791899690934292> Kick a member from the server\n
-<:console:1191791719818203238> </ban:1191037217708195902>\r
+<:console:1191791719818203238> </ban:1206662524502802443>\r
 <:note:1191791899690934292> Ban a member from the server
 `)
     .setColor('Red')
