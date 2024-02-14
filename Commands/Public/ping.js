@@ -10,5 +10,5 @@ module.exports = {
   */
   execute(interaction, client) {
   interaction.reply({content: `pong! *${Math.round(client.ws.ping)}ms*`, ephemeral: true});
-  }
-}
+  },
+};
