@@ -9,5 +9,5 @@ module.exports = {
 
   async execute(interaction) {
     await interaction.reply({ embeds: [help.helpCenterEmbed()], components: [help.helpSelectMenu()] });
-  }
+  },
 };
