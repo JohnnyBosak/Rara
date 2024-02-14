@@ -14,4 +14,4 @@ module.exports = {
     options
     .setName("commands")
     .setDescription("Reload your commands")),
-}
+};
