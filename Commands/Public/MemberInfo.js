@@ -95,8 +95,8 @@ module.exports = {
         interaction.editReply({ content: "An error occurred while fetching member information." });
       }
     }
-  }
-}
+  },
+};
 
 function addSuffix(number) {
   if (number % 100 >= 11 && number % 100 <= 13)
