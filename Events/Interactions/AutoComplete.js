@@ -1,24 +1,24 @@
 const { ChatInputCommandInteraction, ApplicationCommandType } = require("discord.js");
 
 module.exports = {
-  name: "interactionCreate",
-  /** 
-   *
-   * @param {ChatInputCommandInteraction} interaction
-   */
-  async execute(interaction) {
-	if (!interaction.isAutocomplete()) return;
-		const command = interaction.client.commands.get(interaction.commandName);
+    name: "interactionCreate",
+    /** 
+     *
+     * @param {ChatInputCommandInteraction} interaction
+     */
+    async execute(interaction) {
+        if (!interaction.isAutocomplete()) return;
+        const command = interaction.client.commands.get(interaction.commandName);
 
-		if (!command) {
-			console.error(`No command matching ${interaction.commandName} was found.`);
-			return;
-		}
+        if (!command) {
+            console.error(`No command matching ${interaction.commandName} was found.`);
+            return;
+        }
 
-		try {
-			await command.autocomplete(interaction);
-		} catch (error) {
-			console.error(error);
-		}
+        try {
+            await command.autocomplete(interaction);
+        } catch (error) {
+            console.error(error);
+        }
     },
 };
