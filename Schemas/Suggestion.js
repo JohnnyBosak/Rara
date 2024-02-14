@@ -7,5 +7,6 @@ module.exports = model("Suggestion", new Schema({
     Upmembers: Array,
     Downmembers: Array,
     upvotes: Number,
-    downvotes: Number
+    downvotes: Number,
+    Status: String
 }));
