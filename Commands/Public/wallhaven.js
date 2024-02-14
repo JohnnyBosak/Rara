@@ -26,7 +26,7 @@ module.exports = {
   async execute(interaction) {
     const { options } = interaction;
     try {
-      const query = options.getString("search").replace(" ", "+") || null;
+      const query = options.getString("search") || null;
       const categoryCode = options.getString("category") || '111';
       const purityCode = options.getString("purity") || '100';
       const ratios = options.getString("ratios") || '';
@@ -67,8 +67,8 @@ module.exports = {
         await interaction.reply("An error occurred while fetching the image. Please try again later.");
       }
     }
-  }
-}
+  },
+};
 
 function CategoryOption() {
   return (option) =>
