@@ -1,18 +1,18 @@
 module.exports = formatResults;
 
 const pb = {
-    leGreen: '<:lefte:1162595345532985404>',
-    meGreen: '<:middlee:1162595342466953256>',
-    reGreen: '<:righte:1162595340675985438>',
-    lfGreen: '<:leftf:1162595336636862554>',
-    mfGreen: '<:middlef:1162595334552301681>',
-    rfGreen: '<:rightf:1162595330823565412>',
-    leRed: '<:LER:1163119224957435934>',
-    meRed: '<:MER:1163119236256907438>',
-    reRed: '<:RER:1163119246407106620>',
-    lfRed: '<:LFR:1163119231299244204>',
-    mfRed: '<:MFR:1163119240929353730>',
-    rfRed: '<:RFR:1163119253575188570>',
+    leGreen: '<:lefte:1207294549622263850>',
+    meGreen: '<:middlee:1207294881140056084>',
+    reGreen: '<:righte:1207295138817253377>',
+    lfGreen: '<:leftf:1207295331268698203>',
+    mfGreen: '<:middlef:1207295520431804496>',
+    rfGreen: '<:rightf:1207295730826354698>',
+    leRed: '<:LER:1207295953695154218>',
+    meRed: '<:MER:1207296113971953674>',
+    reRed: '<:RER:1207296275905773618>',
+    lfRed: '<:LFR:1207296421783543899>',
+    mfRed: '<:MFR:1207296566285832223>',
+    rfRed: '<:RFR:1207296736599605258>',
 };
 
 function calculateColor(upvotePercentage, downvotePercentage) {
