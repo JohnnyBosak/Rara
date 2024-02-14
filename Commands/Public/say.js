@@ -146,5 +146,5 @@ module.exports = {
       console.error(error);
       return;
     }
-  }
+  },
 };
