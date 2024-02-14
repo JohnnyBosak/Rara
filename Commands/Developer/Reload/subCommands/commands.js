@@ -11,5 +11,5 @@ module.exports = {
   execute(interaction, client) {
     loadCommands(client);
     interaction.reply({content: "Reloaded the commands.", ephemeral: true});
-  }
-}
+  },
+};
