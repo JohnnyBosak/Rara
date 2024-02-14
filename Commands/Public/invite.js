@@ -8,7 +8,7 @@ module.exports = {
 
   async execute(interaction) {
     await interaction.reply({ embeds: [embed], components: [buttons] }).catch((error) => console.log(error));
-  }
+  },
 };
 
 const embed = new EmbedBuilder()
