@@ -6,4 +6,4 @@ module.exports = model("MemberLog", new Schema({
   memberRole: String,
   botRole: String,
   welcomeChannel: String
-}))
+}));
