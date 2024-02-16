@@ -21,7 +21,6 @@ module.exports = {
           name: `[Closed] ${thread.name}`,
           locked: true
         });
-        //await thread.setLocked(true);
         await thread.members.remove(interaction.user.id);
 
         //await interaction.message.edit({ components: [] });
