@@ -1,7 +1,6 @@
 const { ContextMenuInteraction, ContextMenuCommandBuilder, ApplicationCommandType, PermissionFlagsBits, ChannelType, EmbedBuilder } = require("discord.js");
 
 module.exports = {
-  //developer: true,
   data: new ContextMenuCommandBuilder()
     .setName("thread")
     .setType(ApplicationCommandType.Message)
@@ -16,14 +15,17 @@ module.exports = {
         //await interaction.reply({ content: `<a:RemSpin:1117793586390515763> Creating thread..` });
         const message = await interaction.channel.messages.fetch(interaction.targetId);
         
-        if (!message) return;
+        if (!message) { return };
         
-        if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.CreatePublicThreads)) {
-          return await interaction.reply({ content: "I don't have permission to create public threads.", ephemeral: true });
-        }
-        
-        if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.SendMessagesInThreads)) {
-          return await interaction.reply({ content: "I don't have permission to send messages in threads.", ephemeral: true });
+        const requiredPermissions = [
+            { permission: PermissionFlagsBits.CreatePublicThreads, errorMessage: "create public threads" },
+            { permission: PermissionFlagsBits.SendMessagesInThreads, errorMessage: "send messages in threads" },
+        ];
+
+        for (const { permission, errorMessage } of requiredPermissions) {
+            if (!interaction.guild.members.me.permissions.has(permission)) {
+                return await interaction.reply({ content: `I don't have permission to ${errorMessage}. <:ZeroTwoShrug:1208885341575184494>`, ephemeral: true });
+            }
         }
         
         if (message.channel.type === ChannelType.GuildText) {
@@ -48,8 +50,12 @@ module.exports = {
         }
 
     } catch (err) {
+      if (err.code == 50068) {
+        await interaction.reply({ content: '<:akko:748932842670653480> Invalid message type.', ephemeral: true });
+      } else {
       console.log(err);
       await interaction.reply({ content: '<:akko:748932842670653480> An error occurred.', ephemeral: true });
+      }
     }
   },
 };
