@@ -1,7 +1,7 @@
 const { ContextMenuInteraction, ContextMenuCommandBuilder, ApplicationCommandType, PermissionFlagsBits, ChannelType, EmbedBuilder } = require("discord.js");
 
 module.exports = {
-  developer: true,
+  //developer: true,
   data: new ContextMenuCommandBuilder()
     .setName("thread")
     .setType(ApplicationCommandType.Message)
@@ -19,7 +19,11 @@ module.exports = {
         if (!message) return;
         
         if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.CreatePublicThreads)) {
-          return await interaction.reply({ content: "I don't have permission to manage threads.", ephemeral: true });
+          return await interaction.reply({ content: "I don't have permission to create public threads.", ephemeral: true });
+        }
+        
+        if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.SendMessagesInThreads)) {
+          return await interaction.reply({ content: "I don't have permission to send messages in threads.", ephemeral: true });
         }
         
         if (message.channel.type === ChannelType.GuildText) {
