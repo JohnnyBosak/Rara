@@ -29,7 +29,6 @@ module.exports = {
         }
         
         if (message.channel.type === ChannelType.GuildText) {
-          // Create a thread based on the original message
           const thread = await interaction.channel.threads.create({
             name: `Thread created by ${interaction.user.tag}`,
             autoArchiveDuration: 1440,
