@@ -42,8 +42,9 @@ module.exports = {
         .indexOf(member.id) + 1;
 
       const topRoles = member.roles.cache
-        .sort((a, b) => b.position - a.position)
-        .map((role) => role);
+        .filter((roles) => roles.id !== interaction.guild.id)
+        .map((role) => role.toString())
+        .sort((a, b) => b.position - a.position);
       //.slice(0, 3); //display 3 roles
 
       const userBadges = member.user.flags.toArray();
@@ -56,7 +57,7 @@ module.exports = {
       const avatarButton = new ButtonBuilder()
         .setLabel('Avatar')
         .setStyle(5)
-        .setURL(member.displayAvatarURL({ size: 1024, dynamic: true }));
+        .setURL(member.displayAvatarURL({ size: 256, dynamic: true }));
 
       const row = new ActionRowBuilder().addComponents(avatarButton);
 
@@ -74,14 +75,14 @@ module.exports = {
       const embed = new EmbedBuilder()
         .setAuthor({ name: `${member.user.tag} | General Information`, iconURL: member.displayAvatarURL() })
         .setColor(member.displayColor)
-        .setDescription(`On <t:${joinTime}:D>, ${member.user.username} joined as the **${addSuffix(joinPosition)}** member of this guild.`)
+        .setDescription(`On <t:${joinTime}:D>, ${member.user} joined as the **${addSuffix(joinPosition)}** member of this guild.`)
         .setImage("attachment://profile.png")
         .addFields([
-          { name: "Badges", value: `${addBadges(userBadges).join("")}`, inline: true },
+          { name: "Badges", value: `${addBadges(userBadges).join("").replace("X","✖")}`, inline: true },
           { name: "Booster", value: `${booster}`, inline: true },
-          { name: "Roles", value: `${topRoles.join(" ").replace("@everyone", "")}`, inline: false },
-          { name: "Created", value: `<t:${createdTime}:R>`, inline: true },
-          { name: "Joined", value: `<t:${joinTime}:R>`, inline: true },
+          { name: "Roles", value: topRoles.join(" ") || "None", inline: false },
+          { name: "Account Created", value: `<t:${createdTime}:R>`, inline: true },
+          { name: "Joined Server", value: `<t:${joinTime}:R>`, inline: true },
           { name: "UserID", value: `${member.id}`, inline: true },
         ]);
 
