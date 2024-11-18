@@ -21,11 +21,12 @@ module.exports = {
     const banLog = fetchedLogs.entries.first();
     if (!banLog) return;
     
-    const { executor, target } = banLog;
+    const { executor, target, reason } = banLog;
     const embed = new EmbedBuilder()
       .setColor("#f04848")
       .setAuthor({ name: target.tag, iconURL: target.displayAvatarURL({ dynamic: true, size: 256}), })
       .setDescription(`**👮‍♂️ 🔒 <@${target.id}> was banned by ${executor.tag}**.`)
+      .addFields({ name: "Reason", value: reason ? reason : "No reason provided" })
       .setThumbnail(target.displayAvatarURL())
       .setFooter({ text: `ID: ${target.id}` })
       .setTimestamp();

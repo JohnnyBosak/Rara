@@ -16,11 +16,14 @@ module.exports = {
     const Embed = new EmbedBuilder();
     const errorArray = [];
 
+    if (!interaction.guild.members.me.permissions.has("KickMembers") && !interaction.member.permissions.has("BanMembers"))
+      errorArray.push("I do not have the required permissions for this action.");
+
     if (!interaction.member.permissions.has("KickMembers") && !interaction.member.permissions.has("BanMembers"))
       errorArray.push("You do not have the required permissions for this action.");
 
     if (!member)
-      return interaction.reply({ embeds: [Embed.setDescription("This user is no longer a member of this guild.")] });
+      return interaction.reply({ embeds: [Embed.setDescription("This user is no longer a member of this server.")] });
 
     if (!member.moderatable)
       errorArray.push(`${member} is not moderatable by this bot.`);

@@ -41,6 +41,8 @@ module.exports = {
       });
 
       await mongoose.connect(process.env.database, {
+          //useNewUrlParser: true,
+          //useUnifiedTopology: true,
         serverSelectionTimeoutMS: 15000
       });
 
@@ -51,7 +53,7 @@ module.exports = {
       // Adding a 1-second delay here before printing "Ence is now online."
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      console.log(chalk.blue.bold(`${client.user.username} is now connected to database.`));
+      console.log(chalk.blue.bold(`${client.user.username} is now connected to the database.`));
     } catch (error) {
       console.error(chalk.red.bold('Error connecting to the database:', error.message));
       console.log(chalk.red.bold('Database Connection: ❌ Failed'));
@@ -63,8 +65,8 @@ module.exports = {
       if (targetGuild) {
         client.user.setPresence({
           activities: [{
-            name: client.config.New_Year + ' with ' + targetGuild.memberCount + ' people',
-            type: ActivityType.Playing,
+            name: client.config.activities_list[index] + ' with ' + targetGuild.memberCount + ' people',
+            type: ActivityType.Listening,
           }],
           status: 'dnd',
         });

@@ -26,6 +26,8 @@ module.exports = {
 
       const editedMsgChannelLog = guildConfig ? oldMessage.guild.channels.cache.get(guildConfig.edit_logChannel) : null;
       if (!editedMsgChannelLog) return;
+      //if (!message.guild.members.me.permissionsIn(editedMsgChannelLog).has(PermissionFlagsBits.ViewChannel | PermissionFlagsBits.SendMessages | PermissionFlagsBits.EmbedLinks)) return;
+
 
       const Original = oldMessage.content.slice(0, 1950) + (oldMessage.content.length > 1950 ? "..." : "");
       const Edited = newMessage.content.slice(0, 1950) + (newMessage.content.length > 1950 ? "..." : "");

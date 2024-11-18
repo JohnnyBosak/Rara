@@ -26,10 +26,10 @@ module.exports = {
     if (oldMember.roles.cache.size !== newMember.roles.cache.size) {
       if (
         !oldMember.roles.cache.has(
-          newMember.guild.roles.premiumSubscriberRole.id
+          newMember.guild.roles.premiumSubscriberRole?.id
         ) &&
         newMember.roles.cache.has(
-          newMember.guild.roles.premiumSubscriberRole.id
+          newMember.guild.roles.premiumSubscriberRole?.id
         )
       ) {
         // Boost Announcement embed message
@@ -51,7 +51,7 @@ module.exports = {
               text: `${newMember.guild.name} Top Tier Supporter`,
               iconURL: newMember.user.displayAvatarURL({ size: 1024 }),
             })
-            .addFields(
+            /*.addFields(
               {
                 name: "🎉 Server Boost at:",
                 value: `<t:${Math.round(
@@ -68,12 +68,13 @@ module.exports = {
                 )}:f> |\n<t:${Math.round(newMember.joinedTimestamp / 1000)}:R>`,
                 inline: true,
               }
-            )
+            )*/
             .setTimestamp();
 
           const msg = await boostAnnounceChannel.send({
             content: `${newMember} <a:Pin:764789618717097984>`,
-            embeds: [boostAnnounceEmbed]
+            embeds: [boostAnnounceEmbed],
+            allowedMentions: { parse: [] }
           });
           msg.react("<:boost:1177733390577959052>");
         }
@@ -147,10 +148,8 @@ module.exports = {
 
       //Trigger when Member Unboost the server and remove the Nitro Booster Role
       if (
-        oldMember.roles.cache.has(
-          oldMember.guild.roles.premiumSubscriberRole.id
-        ) &&
-        !newMember.roles.cache.has(oldMember.guild.roles.premiumSubscriberRole.id)
+          oldMember.roles.cache.has(oldMember.guild.roles.premiumSubscriberRole?.id) &&
+          !newMember.roles.cache.has(oldMember.guild.roles.premiumSubscriberRole?.id)
       ) {
         if (boostLogChannel) {
           const unboostEmbedLog = new EmbedBuilder()
@@ -204,9 +203,9 @@ module.exports = {
         }
 
         //Send DM to NEW UnBooster
-        oldMember.send({
+        /*oldMember.send({
           content: `Hello ${oldMember.user.tag}\n\nWe regret to inform you that your Nitro Boost for [**__${newMember.guild.name}__**](<https://discord.com/channels/429089094690275338/538755862521446420>) has expired. <:AquaCry:755828551793508472> As a result, you've temporarily lost access to the special perks and exclusive **${oldMember.guild.roles.premiumSubscriberRole.name}** role.\n\nNo worries! 🎉 You can regain these awesome benefits by boosting again. Your support is greatly appreciated! 💜<:boost:1177733390577959052>`
-        });
+        });*/
       }
     }
   },

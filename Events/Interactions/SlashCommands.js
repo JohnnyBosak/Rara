@@ -1,4 +1,4 @@
-const { ChatInputCommandInteraction, ContextMenuInteraction, ApplicationCommandType, PermissionFlagsBits, ChannelType } = require("discord.js");
+const { ChatInputCommandInteraction, ContextMenuInteraction, ApplicationCommandType, PermissionFlagsBits, ChannelType, EmbedBuilder } = require("discord.js");
 
 const requiredPermissions = [
     { permission: PermissionFlagsBits.ViewChannel, message: 'View Channels' },
@@ -55,9 +55,20 @@ module.exports = {
         });
       }
 
+      const subCommandGroup = interaction.options.getSubcommandGroup(false);
       const subCommand = interaction.options.getSubcommand(false);
 
-      if (subCommand) {
+      if (subCommandGroup && subCommand) {
+        const subCommandFile = client.subCommands.get(`${interaction.commandName}.${subCommandGroup}.${subCommand}`);
+        if (!subCommandFile) {
+          return await interaction.reply({
+            content: "This sub-command is outdated.",
+            ephemeral: true
+          });
+        }
+        await subCommandFile.execute(interaction, client);
+
+      } else if (subCommand) {
         const subCommandFile = client.subCommands.get(`${interaction.commandName}.${subCommand}`);
         if (!subCommandFile) {
           return await interaction.reply({
@@ -69,18 +80,31 @@ module.exports = {
       } else {
         await command.execute(interaction, client);
       }
+        const channel = client.channels.cache.get('1240972685509660713');
+
+        const embed = new EmbedBuilder()
+        .setColor("Random")
+        .setTitle(`Slash Command Used!`)
+        .setThumbnail(interaction.user.avatarURL({ dynamic: true }))
+        .addFields({ name: 'Server Name', value: `${interaction.guild.name}  <#${interaction.channelId}>`})
+        .addFields({ name: 'Command', value: `</${interaction.commandName}:${interaction.commandId}>`})
+        .addFields({ name: 'User', value: `${interaction.user}`})
+        .setTimestamp()
+        .setFooter({ text: 'Rara Slash Commands Log', iconURL: interaction.client.user.avatarURL({ dynamic: true })})
+
+        channel.send({ embeds: [embed] });
     } catch (error) {
       console.error(error);
       if (interaction.replied || interaction.deferred) {
         await interaction.followUp({
           content: 'There was an error while executing this command!',
           ephemeral: true
-        });
+        }).catch(err => {});
       } else {
         await interaction.reply({
           content: 'There was an error while executing this command!',
           ephemeral: true
-        });
+        }).catch(err => {});
       }
     }
   },

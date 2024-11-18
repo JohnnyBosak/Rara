@@ -1,6 +1,7 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } = require("discord.js");
 const Canvas = require("canvas");
 const moment = require("moment");
+const axios = require("axios");
 const memberLogDatabase = require("../../Schemas/MemberLog");
 
 // Constants and configuration
@@ -46,8 +47,7 @@ function getRandomWelcomeMessage(member) {
     `A wild ${member.user} appeared.`
   ];
 
-  const randomWelcomeMessage = welcomeMessage[Math.floor(Math.random() * welcomeMessage.length)];
-  return randomWelcomeMessage; // Return the selected welcome message
+  return welcomeMessage[Math.floor(Math.random() * welcomeMessage.length)]; // Return the selected welcome message
 }
 
 // Utility function to get risk level
@@ -58,6 +58,24 @@ function getRiskLevel(accountCreation) {
     }
   }
   return RISK_LEVELS[RISK_LEVELS.length - 1]; // Default to the lowest risk level
+}
+
+async function getRandomImage() {
+  try {
+    const response = await axios.get('https://api.unsplash.com/photos/random', {
+      headers: {
+        Authorization: `Client-ID ${process.env.unsplashAccessKey}`
+      },
+      params: {
+        query: 'gaming',
+        orientation: 'landscape'
+      }
+    });
+    return response.data.urls.regular;
+  } catch (error) {
+    console.error("Error fetching image from Unsplash:", error);
+    return null; // Return null if there was an error
+  }
 }
 
 module.exports = {
@@ -85,7 +103,7 @@ module.exports = {
       const accountCreation = parseInt(member.user.createdTimestamp / 1000);
       const joiningTime = parseInt(member.joinedAt / 1000);
 
-      const riskLevel = getRiskLevel(parseInt(member.user.createdTimestamp / 1000));
+      const riskLevel = getRiskLevel(accountCreation);
 
       if (welcomeChannel) {
         const start = performance.now(); //
@@ -96,7 +114,7 @@ module.exports = {
         welcomeChannel.send({
           content: "## " + randomWelcomeMessage,
           allowedMentions: { parse: [] }, //
-          files: [welcomeImage] //
+          files: welcomeImage ? [welcomeImage] : null //
         });
       }
 
@@ -116,7 +134,7 @@ async function createWelcomeImage(member) {
   welcomeCanvas.context.font = "72px sans-serif";
   welcomeCanvas.context.fillStyle = "#ffffff";
 
-  const background = member.guild.bannerURL() || "https://source.unsplash.com/random/?gaming";
+  const background = member.guild.bannerURL() || await getRandomImage();
 
   try {
     await Canvas.loadImage(background, { timeout: 30000 }).then(async (img) => {
@@ -192,7 +210,8 @@ async function sendLogEmbed(member, riskLevel, assignedRole, accountCreation, jo
       `• Role Assigned: ${assignedRole}`,
       `• Risk Level: ${riskLevel.label}\n`,
       `• Account Created: <t:${accountCreation}:D> | <t:${accountCreation}:R>`,
-      `• Account Joined: <t:${joiningTime}:D> | <t:${joiningTime}:R>`
+      `• Account Joined: <t:${joiningTime}:D> | <t:${joiningTime}:R>`,
+      `• 1st Time Joining?: ${member.flags.has('DidRejoin') ? "No" : "Yes"}`
     ].join("\n"))
     .setFooter({
       text: "Joined"

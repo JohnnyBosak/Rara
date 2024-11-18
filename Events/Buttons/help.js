@@ -24,6 +24,11 @@ module.exports = {
           await interaction.update({ embeds: [emojiEmbed()] });
         }
 
+
+        if (value === 'image') {
+          await interaction.update({ embeds: [imageEmbed()] });
+        }
+
         if (value === 'audio') {
           await interaction.update({ embeds: [audioEmbed()] });
         }
@@ -36,9 +41,14 @@ module.exports = {
           await interaction.update({ embeds: [extraEmbed()] });
         }
 
+
+        if (value === 'botmanagement') {
+          await interaction.update({ embeds: [botManagementEmbed()] });
+        }
+
         if (value === 'moderation') {
 
-          const commandbuttons = new ActionRowBuilder()
+          const commandButtons = new ActionRowBuilder()
             .addComponents(
               new ButtonBuilder()
                 .setCustomId('helpcenterbutton')
@@ -61,9 +71,9 @@ module.exports = {
                 .setCustomId('pageright')
                 .setLabel('▶')
                 .setStyle(ButtonStyle.Success)
-            )
+            );
 
-          const commandbuttons1 = new ActionRowBuilder()
+          const commandButtons1 = new ActionRowBuilder()
             .addComponents(
               new ButtonBuilder()
                 .setCustomId('helpcenterbutton1')
@@ -87,14 +97,13 @@ module.exports = {
                 .setDisabled(true)
                 .setLabel('▶')
                 .setStyle(ButtonStyle.Success)
-            )
+            );
 
-          interaction.update({ embeds: [moderationEmbed1()], components: [commandbuttons] });
-          const commandsmessage = interaction.message;
-          const collector = commandsmessage.createMessageComponentCollector({ componentType: ComponentType.Button });
+          await interaction.update({ embeds: [moderationEmbed1()], components: [commandButtons] });
+          const commandsMessage = interaction.message;
+          const collector = commandsMessage.createMessageComponentCollector({ componentType: ComponentType.Button });
 
           collector.on('collect', async i => {
-
             if (i.customId === 'spacer') {
               return;
             }
@@ -104,11 +113,11 @@ module.exports = {
             }
 
             if (i.customId === 'pageleft') {
-              await i.update({ embeds: [moderationEmbed1()], components: [commandbuttons] });
+              await i.update({ embeds: [moderationEmbed1()], components: [commandButtons] });
             }
 
             if (i.customId === 'pageright') {
-              await i.update({ embeds: [moderationEmbed2()], components: [commandbuttons1] });
+              await i.update({ embeds: [moderationEmbed2()], components: [commandButtons1] });
             }
 
             if (i.customId === 'helpcenterbutton1') {
@@ -116,15 +125,15 @@ module.exports = {
             }
 
             if (i.customId === 'pageright1') {
-              await i.update({ embeds: [moderationEmbed2()], components: [commandbuttons1] });
+              await i.update({ embeds: [moderationEmbed2()], components: [commandButtons1] });
             }
 
             if (i.customId === 'pageleft1') {
-              await i.update({ embeds: [moderationEmbed1()], components: [commandbuttons] });
+              await i.update({ embeds: [moderationEmbed1()], components: [commandButtons] });
             }
-          })
+          });
         }
-      })
+      });
     }
   },
   helpCenterEmbed,
@@ -149,7 +158,7 @@ function helpCenterEmbed() {
   return new EmbedBuilder()
     .setDescription(`Hi! I'm Rara, your charming companion ready to sprinkle some magic in your server! ✨ Let's dive into the wonderland of my features and discover what I can bring to your community.\n\n<:list:1191853632660983829> Listed down below is a quick overview of what I can do:\n\n<:check:1191853535638335498> Warm Greetings\r<:check:1191853535638335498> Music with a Hint of Whimsy\r<:check:1191853535638335498> Moderation\r<:check:1191853535638335498> Extravaganza Entertainment\r<:check:1191853535638335498> Polls for Decision-making\r<:check:1191853535638335498> Verification\n\nThese are just a glimpse of the many features I offer. Ready to explore and elevate your server experience? 🌟.`)
     .setColor('Orange')
-    .setThumbnail('https://i.ibb.co/7bVH49g/Rara.jpg');
+    .setThumbnail('https://i.ibb.co/0J6sDfq/Rara.png');
 }
 
 // Function to get the Giveaway embed
@@ -183,7 +192,25 @@ function emojiEmbed() {
 `)
     .setColor('Yellow')
     .setTitle('> Manage Emojis & Stickers')
-    .setFooter({ text: `Emoji & Stickers: Page 1` });
+    .setFooter({ text: `Emojis & Stickers: Page 1` });
+}
+
+// Function to get the Image Commands embed
+function imageEmbed() {
+  return new EmbedBuilder()
+    .setDescription(`
+<:console:1191791719818203238> </avatar:1264318846542676061>\r
+<:note:1191791899690934292> Display member's avatar in different formats.\n
+<:console:1191791719818203238> </banner:1115039460908880015>\r
+<:note:1191791899690934292> Create a cool banner for an user.\n
+<:console:1191791719818203238> </ai prodia:1246786481591160863>\r
+<:note:1191791899690934292> Generate images using Prodia.\n
+<:console:1191791719818203238> </image:1176330987827904552>\r
+<:note:1191791899690934292> Get an image from wallhaven.\n
+`)
+    .setColor('#1abc9c')
+    .setTitle('> Images and Art')
+    .setFooter({ text: `Images & Arts: Page 1` });
 }
 
 // Function to get the Audio Commands embed
@@ -192,6 +219,8 @@ function audioEmbed() {
     .setDescription(`
       <:console:1191791719818203238> </play:1134503326629769360>\r
       <:note:1191791899690934292> Play music in a voice channel.\n
+      <:console:1191791719818203238> </radio:1233178480372351069>\r
+      <:note:1191791899690934292> Play a radio station in a voice channel.\n
       <:console:1191791719818203238> </yosoundboard:1115039460908880013>\r
       <:note:1191791899690934292> Play an audio soundboard in a voice channel.\n
       <:console:1191791719818203238> </vote-kick:1115039460908880018>\r
@@ -206,14 +235,10 @@ function audioEmbed() {
 function entertainmentEmbed() {
   return new EmbedBuilder()
     .setDescription(`
-  <:console:1191791719818203238> </banner:1115039460908880015>\r
-  <:note:1191791899690934292> Create a cool banner for an user.\n
   <:console:1191791719818203238> </chatgpt:1191153313484374016>\r
   <:note:1191791899690934292> Chat with ChatGPT.\n
   <:console:1191791719818203238> </emoji mixer:1191478213721989131>\r
   <:note:1191791899690934292> Mix two emojis together.\n
-  <:console:1191791719818203238> </image:1176330987827904552>\r
-  <:note:1191791899690934292> Get an image from wallhaven.\n
   <:console:1191791719818203238> </memberinfo:1115039460908880017>\r
   <:note:1191791899690934292> Get information about an user.\n
   <:console:1191791719818203238> </movie:1172623507557978173>\r
@@ -234,17 +259,35 @@ function entertainmentEmbed() {
 function extraEmbed() {
   return new EmbedBuilder()
     .setDescription(`
-      <:console:1191791719818203238> </ping:1115039460908880014>\r
-      <:note:1191791899690934292> Check the bot's latency.\n
-      <:console:1191791719818203238> </invite:1190759846501421137>\r
-      <:note:1191791899690934292> Get Rara's invite link.\n
       <:cursor:1192089502299201609> stealsticker\r
       <:note:1191791899690934292> Steal a sticker sent in the chat.\n
       <:cursor:1192089502299201609> thread\r
       <:note:1191791899690934292> Create a thread from a message sent in the chat.\n
+      <:cursor:1192089502299201609> virus-total\r
+      <:note:1191791899690934292> Analyse suspicious URLs sent in the chat.\n
       `)
     .setColor('#000000')
     .setTitle('> Extra Commands')
+    .setFooter({ text: `Extra commands: Page 1` });
+}
+
+// Function to get Bot Management Commands embed
+function botManagementEmbed() {
+  return new EmbedBuilder()
+    .setDescription(`
+      <:console:1191791719818203238> </rara:1115039461043081249>\r
+      <:note:1191791899690934292> Manage Rara's profile (Dev only).\n
+      <:console:1191791719818203238> </database:1138814047307972628>\r
+      <:note:1191791899690934292> Manage Rara's database (Dev only).\n
+      <:console:1191791719818203238> </reload:1115039461043081249>\r
+      <:note:1191791899690934292> Reload Rara's events/commands (Dev only).\n
+      <:console:1191791719818203238> </ping:1115039460908880014>\r
+      <:note:1191791899690934292> Check the bot's latency.\n
+      <:console:1191791719818203238> </invite:1190759846501421137>\r
+      <:note:1191791899690934292> Get Rara's invite link.\n
+      `)
+    .setColor('DarkRed')
+    .setTitle('> Bot Management Commands')
     .setFooter({ text: `Extra commands: Page 1` });
 }
 
@@ -262,14 +305,14 @@ function moderationEmbed1() {
     <:note:1191791899690934292> Manage automatic moderation for spam messages.\n
     <:console:1191791719818203238> </clear:1191037217708195902>\r
     <:note:1191791899690934292> Delete multiple messages in a channel.\n
+    <:console:1191791719818203238> </setup clear_log:1191037217708195901>\r
+    <:note:1191791899690934292> Configure the logging channel for the /clear command.\n
     <:console:1191791719818203238> </setup ban_log:1191037217708195901>\r
     <:note:1191791899690934292> Set up a ban/unban log channel.\n
     <:console:1191791719818203238> </setup booster:1191037217708195901>\r
     <:note:1191791899690934292> Configure boost logging system for your guild.\n
     <:console:1191791719818203238> </setup welcome:1191037217708195901>\r
     <:note:1191791899690934292> Configure welcome logging system for your guild.\n
-    <:console:1191791719818203238> </setup clear_log:1191037217708195901>\r
-    <:note:1191791899690934292> Configure the logging channel for the /clear command.\n
     `)
     .setColor('Red')
     .setTitle('> Server Moderation')
@@ -279,12 +322,14 @@ function moderationEmbed1() {
 function moderationEmbed2() {
   return new EmbedBuilder()
     .setDescription(`
-<:console:1191791719818203238> </timeout:1115039460908880019>\r
-<:note:1191791899690934292> Restrict a member's ability to communicate temporarily\n
+<:console:1191791719818203238> </ban:1206662524502802443>\r
+<:note:1191791899690934292> Ban a member from the server\n
 <:console:1191791719818203238> </kick:1206662524502802442>\r
 <:note:1191791899690934292> Kick a member from the server\n
-<:console:1191791719818203238> </ban:1206662524502802443>\r
-<:note:1191791899690934292> Ban a member from the server
+<:console:1191791719818203238> </timeout:1115039460908880019>\r
+<:note:1191791899690934292> Restrict a member's ability to communicate temporarily\n
+<:console:1191791719818203238> </unban:1206663971977957436>\r
+<:note:1191791899690934292> Unban a member\n
 `)
     .setColor('Red')
     .setTitle('> Member Moderation')

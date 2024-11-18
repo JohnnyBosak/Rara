@@ -1,7 +1,10 @@
+const { ApplicationCommandType } = require("discord.js");
+
 async function loadCommands(client) {
   const { loadFiles } = require("../Functions/fileLoader");
   const ascii = require("ascii-table");
   const table = new ascii().setHeading("Commands", "Status");
+  const contextMenuTable = new ascii().setHeading("ContextMenu", "Status");
 
   await client.commands.clear();
   await client.subCommands.clear();
@@ -21,7 +24,11 @@ async function loadCommands(client) {
         }
         
         client.commands.set(command.data.name, command);
-        table.addRow(command.data.name, "🟢");
+        if (command.data.type !== ApplicationCommandType.MESSAGE) {
+          contextMenuTable.addRow(command.data.name, "🟢");
+        } else {
+          table.addRow(command.data.name, "🟢");
+        }
         return command.data.toJSON();
       }
     })
@@ -29,7 +36,8 @@ async function loadCommands(client) {
 
   client.application.commands.set(commandsArray.filter(Boolean));
 
-  console.log(table.toString(), "\nCommands Loaded.");
+  console.log(table.toString(), "\nRegular Commands Loaded.");
+  console.log(contextMenuTable.toString(), "\nContextMenu Commands Loaded.");
 }
 
 module.exports = { loadCommands };

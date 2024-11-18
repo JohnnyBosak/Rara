@@ -25,6 +25,12 @@
       "emoji": "😀"
     },
     {
+      "label": "• Images & Arts",
+      "description": "Browse and share images and artworks.",
+      "value": "image",
+      "emoji": "🖼️"
+    },
+    {
       "label": "• Music",
       "description": "Commands list for audio.",
       "value": "audio",
@@ -49,6 +55,15 @@
       "emoji": {
         "name": "settings",
         "id": "1192083464430833724"
+      }
+    },
+    {
+      "label": "• Rara",
+      "description": "Commands for managing the bot.",
+      "value": "botmanagement",
+      "emoji": {
+        "name": "CuteGrump",
+        "id": "797088908315852800"
       }
     }
   ]
