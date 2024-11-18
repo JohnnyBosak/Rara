@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const keepAlive = require(`./server`);
 keepAlive();
 
@@ -20,7 +22,7 @@ const { YtDlpPlugin } = require('@distube/yt-dlp');
 
 client.distube = new DisTube(client, {
   emitNewSongOnly: true,
-  leaveOnFinish: false,// you can change this to your needs
+  //leaveOnFinish: false,
   emitAddSongWhenCreatingQueue: false,
   plugins: [new SpotifyPlugin()]
 });
