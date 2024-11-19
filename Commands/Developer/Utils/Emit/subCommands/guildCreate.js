@@ -12,5 +12,5 @@ module.exports = {
     client.emit("guildCreate", guild);
 
     interaction.reply({content: "Emitted GuildCreate", ephemeral: true});
-  }
-}
+  },
+};
