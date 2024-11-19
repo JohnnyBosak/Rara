@@ -1,4 +1,5 @@
-const { ChatInputCommandInteraction, EmbedBuilder } = require("discord.js");
+const { ChatInputCommandInteraction, PermissionFlagsBits } = require("discord.js");
+const { create } = require('sourcebin');
 
 module.exports = {
   subCommand: "guild.list",
@@ -13,21 +14,33 @@ module.exports = {
 
       for (const [guildId, guild] of guilds) {
         const owner = await guild.fetchOwner();
+        const invites = guild.members.me.permissions.has(PermissionFlagsBits.CreateInstantInvite) ? await guild.invites.fetch() : null;
 
         if (!owner) continue;
 
-        guildList += `**Guild**: ${guild.name} (${guildId})\n`;
-        guildList += `**Members**: ${guild.memberCount}\n`;
-        guildList += `**Owner**: ${owner.user.tag} (${owner.user.id})\n\n`;
+        guildList +=
+            `**Guild**: ${guild.name} (${guildId})  \n` +
+            `**Members**: ${guild.memberCount}  \n` +
+            `**Owner**: ${owner.user} (${owner.user.id})  \n` +
+            `**Invite**: ${invites?.size > 0 ? invites.first().url : "/"}\n\n`;
       }
-      const embed = new EmbedBuilder()
-        .setTitle('Guilds')
-        .setDescription(guildList)
-        .setColor('Random')
-        .setTimestamp();
+
+      const bin = await create(
+          {
+              title: 'Guilds list',
+              description: 'List of guilds that the bot is in',
+              files: [
+                  {
+                      content: guildList,
+                      name: 'Rara Guilds',
+                      language: 'markdown',
+                  },
+              ],
+          },
+      );
 
       await interaction.reply({
-        embeds: [embed]
+        content: bin.url
       });
     } catch (error) {
       console.error(error);
