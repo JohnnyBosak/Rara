@@ -21,9 +21,6 @@ const { YouTubePlugin } = require('@distube/youtube');
 const { DeezerPlugin } = require('@distube/deezer');
 const { DirectLinkPlugin } = require('@distube/direct-link');
 const { FilePlugin } = require('@distube/file');
-const { AppleMusicPlugin } = require('distube-apple-music');
-const { TidalPlugin } = require('distube-tidal');
-const { YandexMusicPlugin } = require('distube-yandex-music-plugin');
 const { YtDlpPlugin } = require('@distube/yt-dlp');
 const { Player } = require('discord-player');
 const cookiesJson = JSON.parse(fs.readFileSync('./youtube_cookies.json', 'utf8'));
@@ -39,9 +36,6 @@ client.distube = new DisTube(client, {
       new DeezerPlugin(),
       new DirectLinkPlugin(),
       new FilePlugin(),
-      new AppleMusicPlugin(),
-      new TidalPlugin(),
-      //new YandexMusicPlugin({ oauthToken: "your_token", uid: "your_uid"}),
       new YouTubePlugin(),
       new YtDlpPlugin({
       update: true,
