@@ -8,6 +8,10 @@ module.exports = {
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setDMPermission(true)
     .addSubcommand((subcommand) => subcommand
+      .setName('info')
+      .setDescription('Display the server\'s information.')
+    )
+    .addSubcommand((subcommand) => subcommand
       .setName('list')
       .setDescription('Lists all guilds Rara is in')
     )
