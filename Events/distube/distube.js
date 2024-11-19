@@ -8,8 +8,8 @@ const disClient = require("../../index.js");
 const status = (queue) =>
   `Volume: \`${queue.volume}%\` | Filter: \`${queue.filters.names.join(", ") || "Off"}\` | Loop: \`${queue.repeatMode ? (queue.repeatMode === 2 ? "All Queue" : "This Song") : "Off"}\` | Autoplay: \`${queue.autoplay ? "On" : "Off"}\``;
 
-    // Create the button components
-    const pauseButton = new ButtonBuilder()
+// Create the button components
+const pauseButton = new ButtonBuilder()
       .setCustomId("pause")
       .setLabel("⏸ Pause")
       // .setEmoji(`<:animated_icon:1253014258942214205>`)
@@ -63,8 +63,20 @@ const status = (queue) =>
     .setLabel("Select Sound Filter")
     .setStyle(ButtonStyle.Secondary)
 
+async function disableAllButtons(queue) {
+  if (!queue.currentMessage) return;
+
+  const components = queue.currentMessage.components.map(row => {
+    return new ActionRowBuilder().addComponents(
+      row.components.map(component => ButtonBuilder.from(component).setDisabled(true))
+    );
+  });
+
+  await queue.currentMessage.edit({ components }).catch(console.error);
+}
+    
 async function updateMusicCard(queue) {
-  if (!queue || !queue.songs.length) return;
+  if (!queue || !queue.songs.length || !queue.currentMessage) return;
 
   const song = queue.songs[0];
   const elapsedTime = Math.floor(queue.currentTime);
@@ -74,7 +86,6 @@ async function updateMusicCard(queue) {
   const minutesElapsed = Math.floor(elapsedTime / 60);
   const secondsElapsed = (elapsedTime % 60).toString().padStart(2, '0');
   const startTime = `${minutesElapsed}:${secondsElapsed}`;
-  const setDisabled = queue.currentMessage && (queue.songs.length === 0);
 
   const musicard = await Classic({
     thumbnailImage: `${song.thumbnail}`,
@@ -93,9 +104,6 @@ async function updateMusicCard(queue) {
   });
 
   fs.writeFileSync("musicard.png", musicard);
-
-  const buttons = [pauseButton, resumeButton, skipButton, stopButton, volumeUpButton, volumeDownButton, repeat, shuffle, filterButton];
-  buttons.forEach(button => button.setDisabled(setDisabled));
   
   const row1 = new ActionRowBuilder()
      .addComponents(pauseButton, resumeButton, skipButton, stopButton, filterButton);
@@ -146,7 +154,7 @@ async function sendMusicCard(queue, song) {
 
     queue.updateInterval = setInterval(() => {
       updateMusicCard(queue);
-    }, 5000);
+    }, 10000);
 
   } catch (error) {
     console.error("Error sending music card:", error);
@@ -206,6 +214,7 @@ disClient.distube
   .on('finish', async (queue) => {
     try {
         await updateMusicCard(queue);
+        await disableAllButtons(queue);
     } catch (error) {
       console.error("Error handling end event:", error);
     }
@@ -342,6 +351,7 @@ if (filterOptions.includes(interaction.customId) || filterOptions1.includes(inte
         } else if (interaction.customId === "stop") {
           client.distube.stop(interaction.guild);
           await interaction.update({ content: "⏹️ Music stopped." });
+          await disableAllButtons(queue);
         } else if (interaction.customId === "shuffle") {
           if (!queue.songs.length || queue.songs.length === 1) {
             await interaction.update({ content: "⚠️ Not enough songs in the queue to shuffle." });
