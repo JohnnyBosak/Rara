@@ -55,13 +55,17 @@ module.exports = {
       try {
         // Reply to the interaction with the embed and button
         await interaction.reply({ embeds: [embed], components: [row] });
+
+        if (!interaction.guild.members.me.permissionsIn(interaction.channel).has(PermissionFlagsBits.UseExternalEmojis)) {
+        await interaction.followUp({ content: `Missing permission: \`Use External Emojis\`. <:ZeroTwoShrug:1208885341575184494>`, ephemeral: true });
+    }
       } catch (err) {
         console.error(`Error replying to interaction: ${err}`);
       }
     } else {
       try {
         // Reply to the interaction if the movie doesn't exist
-        await interaction.reply({ content: "A movie with that title doesn't exist. Make sure you've got the correct title :)", ephemeral: true });
+        await interaction.reply({ content: "A movie with that title doesn't exist. Make sure you've got the correct title <:ZeroTwoNote:1208885345068916828>", ephemeral: true });
       } catch (err) {
         console.error(`Error replying to interaction: ${err}`);
       }

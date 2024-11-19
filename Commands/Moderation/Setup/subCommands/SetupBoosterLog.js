@@ -35,8 +35,8 @@ module.exports = {
       .setTimestamp()
       .setThumbnail('https://cdn.discordapp.com/emojis/1085198386443075706.gif?size=96&quality=lossless')
       .addFields([
-        { name: "Announcement channel was set", value: `The channel ${announcementChannel} has been set as your Booster channel.`, inline: false },
-        { name: "Log channel was set", value: `The channel ${logChannel} has been set as your Booster channel.`, inline: false },
+        { name: "Announcement channel was set", value: `The channel ${announcementChannel} has been set as your announcement channel.`, inline: false },
+        { name: "Log channel was set", value: `The channel ${logChannel} has been set as your log channel.`, inline: false },
       ]);
 
     await interaction.reply({ embeds: [embed] });

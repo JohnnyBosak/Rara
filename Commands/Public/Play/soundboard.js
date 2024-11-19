@@ -23,7 +23,7 @@ module.exports = {
     .addStringOption((option) =>
       option.setName('sound')
         .setDescription('Your choice')
-        .setRequired(false)
+        .setRequired(true)
         .addChoices(
           { name: 'Bruh', value: 'Bruh' },
           { name: 'BTS', value: 'BTS' },
@@ -36,22 +36,12 @@ module.exports = {
           { name: 'Pekora Miko Intro', value: 'PekoraMikoIntro' },
           { name: 'Door Knocking', value: 'DoorKnocking' }
         )
-    )
-    .addStringOption((option) =>
-      option.setName('url-sound')
-        .setDescription('Insert your own soundboard mp3 url')
-        .setRequired(false)
     ),
   async execute(interaction) {
-    let audioURL = null;
     try {
       const sound = interaction.options.getString('sound');
-      const customSound = interaction.options.getString('url-sound');
 
-      if (sound) {
-        audioURL = baseUrl + soundMap[sound];
-      }
-      if (customSound) { audioURL = customSound }
+      const audioURL = baseUrl + soundMap[sound];
 
       if (!audioURL) {
         await interaction.reply({ content: 'Invalid sound option.', ephemeral: true });
@@ -66,7 +56,8 @@ module.exports = {
       const connection = joinVoiceChannel({
         channelId: interaction.member.voice.channel.id,
         guildId: interaction.guild.id,
-        adapterCreator: interaction.guild.voiceAdapterCreator
+        adapterCreator: interaction.guild.voiceAdapterCreator,
+        selfDeaf: false
       });
 
       const audioPlayer = createAudioPlayer();

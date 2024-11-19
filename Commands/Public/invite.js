@@ -6,18 +6,18 @@ module.exports = {
     .setDescription('Invite Rara to your server')
     .setDMPermission(true),
 
-  async execute(interaction) {
+  async execute(interaction, client) {
+    const embed = new EmbedBuilder()
+    .setColor('Red')
+    .setAuthor({ name: 'Invite Rara', iconURL: client.user.displayAvatarURL({ size: 64, dynamic: true }) })
+    .setTitle('Rara dashboard')
+    .setURL('https://johnnybosak.github.io/Rara-Web/')
+    .setDescription('[Invite](https://discord.com/oauth2/authorize?client_id=772939602863587368&permissions=68169720393463&scope=bot) me to your server.')
+    .setThumbnail('https://i.ibb.co/NFft0BS/rias-gremory.png');
+
     await interaction.reply({ embeds: [embed], components: [buttons] }).catch((error) => console.log(error));
   },
 };
-
-const embed = new EmbedBuilder()
-  .setColor('Red')
-  .setAuthor({ name: 'Invite Rara', iconURL: 'https://cdn.discordapp.com/avatars/772939602863587368/13e8a9704032f64926ac7f2487110f7b.png' })
-  .setTitle('Rara dashboard')
-  .setURL('https://johnnybosak.github.io/Rara-Web/')
-  .setDescription('[Invite](https://discord.com/oauth2/authorize?client_id=772939602863587368&permissions=68169720393463&scope=bot) me to your server.')
-  .setThumbnail('https://i.ibb.co/7bVH49g/Rara.jpg');
 
 const buttons = new ActionRowBuilder()
   .addComponents(

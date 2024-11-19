@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits, chatInputCommandInteraction, EmbedBuilder } = require('discord.js');
-const Database = require("../../Schemas/Infractions");
+const Database = require("../../../Schemas/Infractions");
 const ms = require("ms");
 
 module.exports = {
@@ -40,10 +40,19 @@ module.exports = {
     .setAuthor({name: "Could not timeout member due to"})
     .setColor("Red");
 
-    if (!target) return interaction.reply({
-      embeds: [errorsEmbed.setDescription("Member has most likely left the guild.")],
-      ephemeral: true
-    });
+    if (!target) {
+        return await interaction.reply({
+            embeds: [errorsEmbed.setDescription("Member has most likely left the guild.")],
+            ephemeral: true
+        });
+    }
+      
+    if (!interaction.guild.me.permissions.has(PermissionFlagsBits.ModerateMembers)) {
+            return await interaction.reply({
+                content: `Missing permission: \`Time out members\`. <:ZeroTwoShrug:1208885341575184494>`,
+                ephemeral: true,
+            });
+    }
 
     if (!ms(duration) || ms(duration) > ms("28d"))
       errorsArray.push("Time provided is invalid or over the 28d limit.");

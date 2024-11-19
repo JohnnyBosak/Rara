@@ -1,6 +1,7 @@
-const { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField, ChannelType } = require('discord.js');
+const { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionFlagsBits, ChannelType } = require('discord.js');
 const suggestion = require('../../Schemas/Suggestion');
 const formatResults = require('../../Utils/formatResults');
+const { checkPermissions } = require('../../Utils/checkPermissions');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -27,7 +28,13 @@ module.exports = {
   * @param {ChatInputCommandInteraction} interaction
   */
     async execute (interaction, client) {
+      const requiredPermissions = ['ViewChannel', 'SendMessages', 'EmbedLinks', 'UseExternalEmojis'];
+      const permissionsCheckResult = checkPermissions(interaction, requiredPermissions);
 
+      if (permissionsCheckResult !== true) {
+          return;
+        } 
+        
     const { options } = interaction;
     const Data = await suggestion.findOne({ GuildID: interaction.guild.id });
     const suggestTitle = options.getString('title');

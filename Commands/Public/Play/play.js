@@ -1,15 +1,24 @@
-const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder,  SlashCommandBuilder,  PermissionFlagsBits } = require("discord.js");
+const { checkPermissions } = require('../../../Utils/checkPermissions');
 
 module.exports = {
+    requiredBotPermissions: [PermissionFlagsBits.SendMessages, PermissionFlagsBits.Speak, PermissionFlagsBits.AttachFiles],
     data: new SlashCommandBuilder()
         .setName("play")
-        .setDescription("Play a song.")
+        .setDescription("♬˚🎧 | Play a song.")
         .addStringOption(option => option
             .setName("query")
             .setDescription("Provide the name or url for the song.")
             .setRequired(true)
         ),
     async execute(interaction, client) {
+        const requiredPermissions = ['ViewChannel', 'SendMessages', 'Speak', 'AttachFiles', 'UseExternalEmojis'];
+        const permissionsCheckResult = checkPermissions(interaction, requiredPermissions);
+
+        if (permissionsCheckResult !== true) {
+            return;
+        }
+
         const { options, member, guild, channel } = interaction;
 
         const query = options.getString("query");
@@ -33,33 +42,35 @@ module.exports = {
             });
         }
 
-        interaction.reply({
-            content: "<:music:1202180879883960330> Request received",
+        await interaction.deferReply({
             ephemeral: true
-            });
+        });
 
-        try {
-            await client.distube.play(voiceChannel, query, {
+        client.distube.play(voiceChannel, query, {
                 textChannel: channel,
                 member: member
-            });
-
-        } catch (error) {
-            console.log(error);
-
-            // Check if the error is related to a private video
-            if (error.name === 'PlayError' && error.message.includes('private video')) {
-                embed.setColor("#457cf0").setDescription("⛔ | Sorry, I can't play private videos..");
-            } else if (error.name === 'PlayError' && error.message.includes('Video unavailable')) {
-                embed.setColor("#457cf0").setDescription("⛔ | Sorry, the requested video is unavailable. It may have been removed or restricted..");
-            } else {
-                embed.setColor("#457cf0").setDescription("⛔ | Something went wrong...");
-            }
-
-            return interaction.followUp({
-                    embeds: [embed],
+            })
+            .then(() => {
+                interaction.editReply({
+                    content: "🎶 The request has been received. Please ensure the Bot has the necessary permissions.",
                     ephemeral: true
                 });
-         }
+            })
+            .catch((error) => {
+                if (error && error.code === "NOT_SUPPORTED_URL") {
+                    embed.setColor("#457cf0").setDescription(":x: | This is not a song link or it is not supported. Please provide the correct song name or a valid song link.");
+                    interaction.editReply({
+                        embeds: [embed],
+                        ephemeral: true
+                    });
+                } else {
+                    console.error(error);
+                    embed.setColor("#457cf0").setDescription("⛔ | An error has occurred...");
+                    interaction.editReply({
+                        embeds: [embed],
+                        ephemeral: true
+                    });
+                }
+            });
     }
 };

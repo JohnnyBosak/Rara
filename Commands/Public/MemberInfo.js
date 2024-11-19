@@ -17,6 +17,10 @@ module.exports = {
   * @param {ChatInputCommandInteraction} interaction
   */
   async execute(interaction) {
+    if (!interaction.guild.members.me.permissionsIn(interaction.channel).has(PermissionFlagsBits.UseExternalEmojis)) {
+        return await interaction.reply({ content: `Missing permission: \`Use External Emojis\`. <:ZeroTwoShrug:1208885341575184494>`, ephemeral: true });
+    }
+
     await interaction.deferReply();
     const member = interaction.options.getMember("member") || interaction.member;
 

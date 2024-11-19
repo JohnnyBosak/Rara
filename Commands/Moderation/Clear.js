@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, ChatInputCommandInteraction } = require("discord.js");
 const transcripts = require("discord-html-transcripts");
 const database = require("../../Schemas/ClearLog");
+const { checkPermissions } = require('../../Utils/checkPermissions');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -27,6 +28,13 @@ module.exports = {
    * @param {ChatInputCommandInteraction} interaction
    */
   async execute(interaction) {
+      const requiredPermissions = ['ViewChannel', 'ReadMessageHistory', 'ManageMessages'];
+      const permissionsCheckResult = checkPermissions(interaction, requiredPermissions);
+
+      if (permissionsCheckResult !== true) {
+          return;
+        }
+
     await interaction.deferReply({ ephemeral: true });
     
     try {
@@ -66,7 +74,7 @@ module.exports = {
         await interaction.channel.bulkDelete(messagesToDelete, true);
         await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
 
-      if (logChannel) {
+      if (logChannel && interaction.guild.members.me.permissionsIn(logChannel).has(PermissionFlagsBits.ViewChannel | PermissionFlagsBits.SendMessages | PermissionFlagsBits.AttachFiles)) {
         const logEmbed = new EmbedBuilder()
           .setColor("DarkAqua")
           .setAuthor({ name: "CLEAR COMMAND USED" })
