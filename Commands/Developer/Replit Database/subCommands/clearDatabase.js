@@ -1,5 +1,6 @@
 const { ChatInputCommandInteraction, MessageButton } = require("discord.js");
 const db = require("@replit/database");
+require('dotenv').config();
 const config = require("../../../../config.json");
 
 module.exports = {
@@ -19,7 +20,7 @@ module.exports = {
 
     const keyToDelete = interaction.options.getString('key');
     if (keyToDelete) {
-      const database = new db();
+      const database = new db(process.env.REPLIT_DB_URL);
 
       try {
         const value = await database.get(keyToDelete);
