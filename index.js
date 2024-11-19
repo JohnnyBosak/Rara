@@ -47,6 +47,7 @@ client.distube = new DisTube(client, {
       }
     })
   ],
+  nsfw: true,
 });
 module.exports = client;
 
