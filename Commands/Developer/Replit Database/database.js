@@ -17,15 +17,16 @@ module.exports = {
     )
     .addSubcommand((command) => command
       .setName('set')
-      .setDescription('Clears the contents of the Replit Database')
+      .setDescription('Sets a JSON object in the Replit Database under a specified name')
       .addStringOption((option) => option
-        .setName('key')
-        .setDescription('Specify the key to set in the database')
+        .setName('name')
+        .setDescription('Set a name for your data to be stored in the database')
         .setRequired(true)
       )
       .addStringOption((option) => option
-        .setName('value')
-        .setDescription('Specify the value to set for the key')
+        .setName('settings')
+        .setDescription('In JSON format')
+        .setRequired(true)
       )
     )
     .addSubcommand((command) => command
