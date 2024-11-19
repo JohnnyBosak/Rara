@@ -52,7 +52,7 @@ module.exports = {
             })
             .then(() => {
                 interaction.editReply({
-                    content: "🎶 The request has been received. Please ensure the Bot has the necessary permissions.",
+                    content: "🎶 The request has been received.",
                     ephemeral: true
                 });
             })

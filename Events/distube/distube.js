@@ -74,7 +74,7 @@ async function updateMusicCard(queue) {
   const minutesElapsed = Math.floor(elapsedTime / 60);
   const secondsElapsed = (elapsedTime % 60).toString().padStart(2, '0');
   const startTime = `${minutesElapsed}:${secondsElapsed}`;
-  const setDisabled = queue.currentMessage && (queue.songs.length === 0 || queue.songs.length === 1);
+  const setDisabled = queue.currentMessage && (queue.songs.length === 0);
 
   const musicard = await Classic({
     thumbnailImage: `${song.thumbnail}`,
@@ -260,14 +260,14 @@ module.exports = {
       return;
     }
 
-        const authorizedId = ['User ID 1', 'User ID 2'];
-        if (!authorizedId.includes(interaction.user.id)) {
+        const blockedId = ['User ID 1', 'User ID 2'];
+        if (blockedId.includes(interaction.user.id)) {
           const embed = new EmbedBuilder()
             .setColor(`Red`)
             .setTitle(`NOTE!`)
-            .setDescription(`You can contact [@Valheim Survival](https://discord.com/channels/@me/1225249585656496149) for assistance\n\`\`\`yml\nOnly administrators can use the music control buttons.\`\`\``)
+            .setDescription(`You can contact <@${client.user.id}> for assistance\n\`\`\`yml\nYou cannot use the music control buttons for now.\`\`\``)
             .setTimestamp()
-            .setFooter({ text: `Bot-Youtube` });
+            .setFooter({ text: `Rara`, iconURL: client.user.displayAvatarURL() });
         
           await interaction.reply({ embeds: [embed], ephemeral: true });
           return;

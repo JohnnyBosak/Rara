@@ -6,7 +6,7 @@ module.exports = {
         .setName("rara")
         .setDescription("Manage Rara's profile")
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-        .setContexts(ContextTypes.Guild, ContextTypes.DM)
+        .setDMPermission(true)
         .addSubcommand((options) =>
             options
             .setName("avatar")
