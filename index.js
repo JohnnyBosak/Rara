@@ -2,7 +2,7 @@ require('dotenv').config();
 const keepAlive = require(`./server`);
 keepAlive();
 
-const { Client, GatewayIntentBits, Partials, Collection } = require("discord.js");
+const { Client, GatewayIntentBits, Partials, Collection, WebhookClient } = require("discord.js");
 const { Guilds, GuildMembers, GuildModeration, GuildEmojisAndStickers, GuildIntegrations, GuildWebhooks, GuildInvites, GuildVoiceStates, GuildPresences, GuildMessages, GuildMessageReactions, GuildMessageTyping, DirectMessages, DirectMessageReactions, DirectMessageTyping, MessageContent, GuildScheduledEvents, AutoModerationConfiguration, AutoModerationExecution, GuildMessagePolls, DirectMessagePolls } = GatewayIntentBits;
 
 const { User, Message, GuildMember, ThreadMember, Channel, Reaction, GuildScheduledEvent } = Partials;
@@ -49,6 +49,8 @@ client.distube = new DisTube(client, {
   ],
   nsfw: true,
 });
+client.distube.setMaxListeners(200);
+
 module.exports = client;
 
 const { loadEvents } = require("./Handlers/eventHandler");
@@ -90,6 +92,23 @@ client.giveawayManager = new GiveawaysManager(client, {
     embedColorEnd: "#550485",
     reaction: "🎉",
   },
+});
+
+const webhookClient = new WebhookClient({ url: process.env.debianWebhook });
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  webhookClient.send({
+    content: `Unhandled Rejection at: ${promise}\nReason: ${reason}`
+  });
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+  webhookClient.send({
+    content: `Uncaught Exception: ${error.message}\nStack: ${error.stack}`
+  });
+  process.exit(1); // Optional: Exit the process after handling the exception
 });
 
 client.login(process.env.token)
